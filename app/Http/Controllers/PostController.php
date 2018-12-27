@@ -67,6 +67,6 @@ class PostController extends Controller
     public function update(Request $request,$id){
         date_default_timezone_set('Asia/Ho_Chi_Minh');
         $post=Post::find($id)->update($request->all());
-        return response()->json(['data'=>$post,'data1',$tags],200);
+        return response()->json(['data'=>$post],200);
     }
 }

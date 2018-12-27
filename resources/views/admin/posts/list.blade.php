@@ -362,12 +362,12 @@
 						description: description,
 						slug: slug,
 						content: content,
-						category_id: category_id,
-						tags_name: tag
+						category_id: category_id
 					},
 					success: function(response) {
 						console.log(response);
 						alert('Hello');
+						$('#bootstrap-data-table').DataTable().ajax.reload(null,false);
 					},
 					error: function (jqXHR, textStatus, errorThrown) {
 						alert('failed');
