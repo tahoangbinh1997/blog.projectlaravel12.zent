@@ -8,6 +8,8 @@ use App\Http\Requests\CommentRequest;
 
 use Validator;
 
+use Illuminate\Support\Facades\Event;
+
 class BlogController extends Controller
 {
     /**
@@ -47,7 +49,6 @@ class BlogController extends Controller
         $post = \App\Post::where('slug', $slug)->firstOrFail();
         $post->view_count = $post->view_count-1;
         $post->save();
-        date_default_timezone_set('Asia/Ho_Chi_Minh');
         if (isset($_POST['submit'])) {
             $validate = Validator::make(
                 $request->all(),
@@ -110,8 +111,25 @@ class BlogController extends Controller
         $posts = \App\Post::get();
         $comments = \App\Post::find($post->id)->comments()->Paginate(3);
         $post_tags = \App\Post::find($post->id)->tags;
-
-        return view('detail.single-standard',compact('post','category','posts','next','previous','maxpost','minpost','comments','post_tags'));
+        $like_post_ip = \App\Like::where('ip_client', $request->ip())->first();
+        $dislike_post_ip = \App\Dislike::where('ip_client', $request->ip())->first();
+        if (isset($like_post_ip)) {
+            $rela_post_like = \App\PostLike::where('post_id','=',$post->id)->where('like_id','=',$like_post_ip->id)->first();
+            if (isset($dislike_post_ip)) {
+                $rela_post_dislike = \App\PostDislike::where('post_id','=',$post->id)->where('dislike_id','=',$dislike_post_ip->id)->first();
+            }
+        }else {
+            if (isset($dislike_post_ip)) {
+                $rela_post_dislike = \App\PostDislike::where('post_id','=',$post->id)->where('dislike_id','=',$dislike_post_ip->id)->first();
+            }
+        }
+        if (isset($rela_post_like)) {
+            return view('detail.single-standard',compact('post','category','posts','next','previous','maxpost','minpost','comments','post_tags','rela_post_like'));
+        }else if (isset($rela_post_dislike)) {
+            return view('detail.single-standard',compact('post','category','posts','next','previous','maxpost','minpost','comments','post_tags','rela_post_dislike'));
+        }else {
+            return view('detail.single-standard',compact('post','category','posts','next','previous','maxpost','minpost','comments','post_tags'));
+        }
     }
 
     /**
@@ -178,5 +196,123 @@ class BlogController extends Controller
         // dd($posts);
         $categories = \App\Category::get();
         return view('search.search',compact('posts','categories','q'));
+    }
+
+    public function like_posts(Request $request,$slug) {
+        $ipClient = $request->getClientIp(); //lấy ra địa chỉ ip hiện tại
+        $post = \App\Post::where('slug',$slug)->firstOrFail(); //lấy ra bài post hiện tại
+        $ip_like = \App\Like::where('ip_client','=',$ipClient)->first(); //lấy ra địa chỉ ip đã like bài post đó dựa trên địa chỉ ip hiện tại
+        $ip_dislike = \App\Dislike::where('ip_client','=',$ipClient)->first(); //lấy ra địa chỉ ip đã dislike bài post đó dựa trên địa chỉ ip hiện tại
+        if ($ip_like == NULL) {
+            $create = \App\Like::create([
+                'ip_client' => $ipClient,
+            ]); //tạo bản ghi chứa địa chỉ ip đã like đó
+            \App\PostLike::create([
+                'post_id' => $post->id,
+                'like_id' => $create->id
+            ]); //tạo mối quan hệ giữa bài post đã được like với địa chỉ ip đó
+            $post->like = $post->like+1; //tăng số like của bản ghi đó lên +1
+            $post->save();
+            if ($ip_dislike != NULL) {
+                $rela_post_dislike = \App\PostDislike::where('post_id','=',$post->id)->where('dislike_id','=',$ip_dislike->id)->first(); // lấy ra mối quan hệ của bài post đã dislike hiện tại và địa chỉ ip đó
+                if ($rela_post_dislike != NULL) {
+                    $rela_post_dislike->delete();
+                }
+                if (\App\PostDislike::where('dislike_id','=',$ip_dislike->id)->first() == NULL) { //nếu trong trường hợp địa chỉ ip đó đã không còn dislike bài viết nào nữa
+                    $ip_dislike->delete(); // xóa luôn bản ghi của địa chỉ ip đã dislike đó
+                }
+                $post->dislike = $post->dislike-1; //giảm số dislike của bản ghi đó lên -1
+                $post->save();
+                return response()->json([
+                    'post_res' => $post
+                ]);
+            }else {
+                return response()->json([
+                    'post_res' => $post
+                ]);
+            }
+        } else {
+            $rela_post_like = \App\PostLike::where('post_id','=',$post->id)->where('like_id','=',$ip_like->id)->first(); // lấy ra mối quan hệ của bài post đã like hiện tại và địa chỉ ip đó
+            if ($rela_post_like == NULL) {
+                \App\PostLike::create([
+                    'post_id' => $post->id,
+                    'like_id' => $ip_like->id
+                ]); //tạo mối quan hệ giữa bài post đã được like với địa chỉ ip đó
+                $post->like = $post->like+1; //tăng số like của bản ghi đó lên +1
+                $post->save();
+                return response()->json([
+                    'post_res' => $post
+                ]);
+            } else {
+                $rela_post_like->delete(); // xóa mối quan hệ của bài post đã được like đó với địa chỉ ip hiện tại
+                if (\App\PostLike::where('like_id','=',$ip_like->id)->first() == NULL) { //nếu trong trường hợp địa chỉ ip đó đã không còn like bài viết nào nữa
+                    $ip_like->delete(); // xóa luôn bản ghi của địa chỉ ip đã like đó
+                }
+                $post->like = $post->like-1; //giảm số like của bản ghi đó lên -1
+                $post->save();
+                return response()->json([
+                    'post_res' => $post
+                ]);
+            }
+        }
+    }
+
+    public function dislike_posts(Request $request,$slug) {
+        $ipClient = $request->getClientIp(); //lấy ra địa chỉ ip hiện tại
+        $post = \App\Post::where('slug',$slug)->firstOrFail(); //lấy ra bài post hiện tại
+        $ip_like = \App\Like::where('ip_client','=',$ipClient)->first(); //lấy ra địa chỉ ip đã like bài post đó dựa trên địa chỉ ip hiện tại
+        $ip_dislike = \App\Dislike::where('ip_client','=',$ipClient)->first(); //lấy ra địa chỉ ip đã dislike bài post đó dựa trên địa chỉ ip hiện tại
+        if ($ip_dislike == NULL) {
+            $create = \App\Dislike::create([
+                'ip_client' => $ipClient,
+            ]); //tạo bản ghi chứa địa chỉ ip đã dislike đó
+            \App\PostDislike::create([
+                'post_id' => $post->id,
+                'dislike_id' => $create->id
+            ]); //tạo mối quan hệ giữa bài post đã được dislike với địa chỉ ip đó
+            $post->dislike = $post->dislike+1; //tăng số dislike của bản ghi đó lên +1
+            $post->save();
+            if ($ip_like != NULL) {
+                $rela_post_like = \App\PostLike::where('post_id','=',$post->id)->where('like_id','=',$ip_like->id)->first(); // lấy ra mối quan hệ của bài post đã like hiện tại và địa chỉ ip đó
+                if ($rela_post_like != NULL) {
+                    $rela_post_like->delete();
+                }
+                if (\App\Postlike::where('like_id','=',$ip_like->id)->first() == NULL) { //nếu trong trường hợp địa chỉ ip đó đã không còn like bài viết nào nữa
+                    $ip_like->delete(); // xóa luôn bản ghi của địa chỉ ip đã like đó
+                }
+                $post->like = $post->like-1; //giảm số like của bản ghi đó lên -1
+                $post->save();
+                return response()->json([
+                    'post_res' => $post
+                ]);
+            }else {
+                return response()->json([
+                    'post_res' => $post
+                ]);
+            }
+        } else {
+            $rela_post_dislike = \App\PostDislike::where('post_id','=',$post->id)->where('dislike_id','=',$ip_dislike->id)->first(); // lấy ra mối quan hệ của bài post đã dislike hiện tại và địa chỉ ip đó
+            if ($rela_post_dislike == NULL) {
+                \App\PostDislike::create([
+                    'post_id' => $post->id,
+                    'dislike_id' => $ip_dislike->id
+                ]); //tạo mối quan hệ giữa bài post đã được dislike với địa chỉ ip đó
+                $post->dislike = $post->dislike+1; //tăng số dislike của bản ghi đó lên +1
+                $post->save();
+                return response()->json([
+                    'post_res' => $post
+                ]);
+            } else {
+                $rela_post_dislike->delete(); // xóa mối quan hệ của bài post đã được dislike đó với địa chỉ ip hiện tại
+                if (\App\PostDislike::where('dislike_id','=',$ip_dislike->id)->first() == NULL) { //nếu trong trường hợp địa chỉ ip đó đã không còn dislike bài viết nào nữa
+                    $ip_dislike->delete(); // xóa luôn bản ghi của địa chỉ ip đã dislike đó
+                }
+                $post->dislike = $post->dislike-1; //giảm số dislike của bản ghi đó lên -1
+                $post->save();
+                return response()->json([
+                    'post_res' => $post
+                ]);
+            }
+        }
     }
 }

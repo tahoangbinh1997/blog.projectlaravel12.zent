@@ -41,7 +41,7 @@
                                 $convert_month = DateTime::createFromFormat('!m',$month_num); //convert tháng sang kiểu chữ
                               @endphp
                                 {{$convert_month->format('F')}} {{$date->format('d')}}, {{$date->format('Y')}}
-                          </span> 
+                          </span> <br>
                           <span class="ml-2"><span class="fa fa-comments"></span>
                             @php $dem = 0; @endphp
                             @foreach($comment_counts as $counts)
@@ -50,6 +50,10 @@
                             @endif
                             @endforeach
                             {{$dem}}
+                            <span class="ml-2"><span class="fa fa-thumbs-up"></span>
+                            <span id="post-like">{{$post->like}}</span>
+                            <span class="ml-2"><span class="fa fa-thumbs-down"></span>
+                            <span id="post-dislike">{{$post->dislike}}</span>
                           </span>
                         </div>
                         <a href="{{asset('')}}detail/{{$post->slug}}"><h2>{{$post->title}}</h2></a>
@@ -169,7 +173,7 @@
                                         $convert_month = DateTime::createFromFormat('!m',$month_num); //convert tháng sang kiểu chữ
                                     @endphp
                                         {{$convert_month->format('F')}} {{$date->format('d')}}, {{$date->format('Y')}}
-                                </span> &bullet;
+                                </span> &bullet;<br>
                                 <span class="ml-2"><span class="fa fa-comments"></span>
                                   @php $dem = 0; @endphp
                                   @foreach($comment_counts as $counts)

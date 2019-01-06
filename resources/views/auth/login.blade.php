@@ -12,10 +12,10 @@
         </span>
 
 
-        <div class="wrap-input100 validate-input" data-validate = "Valid email is required: ex@abc.xyz">
+        <div class="wrap-input100 validate-input" data-validate = "Usename of email is required">
             <input class="input100 {{ old('email') ? 'has-val':'' }}" type="text" name="email" value="{{ old('email') }}">
             <span class="focus-input100"></span>
-            <span class="label-input100">Email</span>
+            <span class="label-input100">Email of Username</span>
         </div>
         @if($errors->has('email')) 
             <span style="color: red;position: relative;bottom: 6px;">{{ $errors->first('email') }}</span>

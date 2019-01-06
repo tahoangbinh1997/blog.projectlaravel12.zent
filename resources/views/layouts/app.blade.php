@@ -41,7 +41,7 @@
                 @yield('content1')
                 {{-- end content --}}
 
-                <div class="login100-more" style="background-image: url('{{asset('login_assets/images/bg-01.jpg')}}');">
+                <div class="login100-more" style="background-image: url('{{asset('login_assets/images/wp3786113.jpg')}}');">
                 </div>
             </div>
         </div>

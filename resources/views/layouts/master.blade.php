@@ -3,9 +3,6 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <!-- link header -->
-        @yield('header')
-    {{-- end header --}}
 
     </head>
     <meta charset="utf-8">
@@ -24,11 +21,11 @@
 
     <!-- Theme Style -->
     <link rel="stylesheet" href="{{asset('blog_assets/css/style.css')}}">
+    <!-- link header -->
+        @yield('header')
+    {{-- end header --}}
   </head>
   <body>
-    
-
-
     <header role="banner">
       <div class="top-bar">
         <div class="container">
@@ -176,6 +173,10 @@
                                 @endif
                             @endforeach
                             {{$dem}}
+                            <span class="ml-2"><span class="fa fa-thumbs-up"></span>
+                            <span id="post-like">{{$best_post->like}}</span>
+                            <span class="ml-2"><span class="fa fa-thumbs-down"></span>
+                            <span id="post-dislike">{{$best_post->dislike}}</span>
                           </span>
                         </div>
                       </div>
@@ -231,7 +232,7 @@
                   <ul>
                     @foreach($last_posts as $last_post)
                         <li>
-                          <a href="">
+                          <a href="{{asset('')}}/detail/{{$last_post->slug}}">
                             <img src="{{asset('storage/images')}}/{{$last_post->thumbnail}}" alt="Image placeholder" class="mr-4">
                             <div class="text">
                               <h4>{{$last_post->title}}</h4>
@@ -252,6 +253,10 @@
                                     @endif
                                     @endforeach
                                     {{$dem}}
+                                    <span class="ml-2"><span class="fa fa-thumbs-up"></span>
+                                    <span id="post-like">{{$last_post->like}}</span>
+                                    <span class="ml-2"><span class="fa fa-thumbs-down"></span>
+                                    <span id="post-dislike">{{$last_post->dislike}}</span>
                                 </span>
                               </div>
                             </div>
@@ -291,13 +296,13 @@
             </div>
           </div>
         </div>
-        <div class="row">
+        {{-- <div class="row">
           <div class="col-md-12">
             <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
 Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
 <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
           </div>
-        </div>
+        </div> --}}
       </div>
     </footer>
     <!-- END footer -->
@@ -312,8 +317,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
     <script src="{{asset('blog_assets/js/owl.carousel.min.js')}}"></script>
     <script src="{{asset('blog_assets/js/jquery.waypoints.min.js')}}"></script>
     <script src="{{asset('blog_assets/js/jquery.stellar.min.js')}}"></script>
-
-    
+    @yield('footer')
     <script src="{{asset('blog_assets/js/main.js')}}"></script>
   </body>
 </html>

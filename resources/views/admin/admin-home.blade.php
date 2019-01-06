@@ -1,432 +1,399 @@
 @extends('layouts.admin-temp')
 
-@section('header')
-	<title>Trang Quản Lý Admin</title>
-@endsection
 
-@section('active')
-	active
+@section('dashboard-active')
+    active
 @endsection
-
 @section('content')
-	<div class="breadcrumbs">
-            <div class="col-sm-4">
-                <div class="page-header float-left">
-                    <div class="page-title">
-                        <h1>Dashboard</h1>
+<!-- START BREADCRUMB -->
+<ul class="breadcrumb">
+    <li><a href="{{asset('')}}admin/home">Home</a></li>                    
+    <li class="active">Dashboard</li>
+</ul>
+<!-- END BREADCRUMB -->                       
+
+<!-- PAGE CONTENT WRAPPER -->
+<div class="page-content-wrap">
+
+    <!-- START WIDGETS -->                    
+    <div class="row">
+        <div class="col-md-3">
+
+            <!-- START WIDGET SLIDER -->
+            <div class="widget widget-default widget-carousel">
+                <div class="owl-carousel" id="owl-example">
+                    <div>                                    
+                        <div class="widget-title">Total Visitors</div>                                                                        
+                        <div class="widget-subtitle">27/08/2014 15:23</div>
+                        <div class="widget-int">3,548</div>
                     </div>
+                    <div>                                    
+                        <div class="widget-title">Returned</div>
+                        <div class="widget-subtitle">Visitors</div>
+                        <div class="widget-int">1,695</div>
+                    </div>
+                    <div>                                    
+                        <div class="widget-title">New</div>
+                        <div class="widget-subtitle">Visitors</div>
+                        <div class="widget-int">1,977</div>
+                    </div>
+                </div>                            
+                <div class="widget-controls">                                
+                    <a href="#" class="widget-control-right widget-remove" data-toggle="tooltip" data-placement="top" title="Remove Widget"><span class="fa fa-times"></span></a>
+                </div>                             
+            </div>         
+            <!-- END WIDGET SLIDER -->
+
+        </div>
+        <div class="col-md-3">
+
+            <!-- START WIDGET MESSAGES -->
+            <div class="widget widget-default widget-item-icon" onclick="location.href='pages-messages.html';">
+                <div class="widget-item-left">
+                    <span class="fa fa-envelope"></span>
+                </div>                             
+                <div class="widget-data">
+                    <div class="widget-int num-count">48</div>
+                    <div class="widget-title">New messages</div>
+                    <div class="widget-subtitle">In your mailbox</div>
+                </div>      
+                <div class="widget-controls">                                
+                    <a href="#" class="widget-control-right widget-remove" data-toggle="tooltip" data-placement="top" title="Remove Widget"><span class="fa fa-times"></span></a>
+                </div>
+            </div>                            
+            <!-- END WIDGET MESSAGES -->
+
+        </div>
+        <div class="col-md-3">
+
+            <!-- START WIDGET REGISTRED -->
+            <div class="widget widget-default widget-item-icon" onclick="location.href='pages-address-book.html';">
+                <div class="widget-item-left">
+                    <span class="fa fa-user"></span>
+                </div>
+                <div class="widget-data">
+                    <div class="widget-int num-count">375</div>
+                    <div class="widget-title">Registred users</div>
+                    <div class="widget-subtitle">On your website</div>
+                </div>
+                <div class="widget-controls">                                
+                    <a href="#" class="widget-control-right widget-remove" data-toggle="tooltip" data-placement="top" title="Remove Widget"><span class="fa fa-times"></span></a>
+                </div>                            
+            </div>                            
+            <!-- END WIDGET REGISTRED -->
+
+        </div>
+        <div class="col-md-3">
+
+            <!-- START WIDGET CLOCK -->
+            <div class="widget widget-info widget-padding-sm">
+                <div class="widget-big-int plugin-clock">00:00</div>                            
+                <div class="widget-subtitle plugin-date">Loading...</div>
+                <div class="widget-controls">                                
+                    <a href="#" class="widget-control-right widget-remove" data-toggle="tooltip" data-placement="left" title="Remove Widget"><span class="fa fa-times"></span></a>
+                </div>                            
+                <div class="widget-buttons widget-c3">
+                    <div class="col">
+                        <a href="#"><span class="fa fa-clock-o"></span></a>
+                    </div>
+                    <div class="col">
+                        <a href="#"><span class="fa fa-bell"></span></a>
+                    </div>
+                    <div class="col">
+                        <a href="#"><span class="fa fa-calendar"></span></a>
+                    </div>
+                </div>                            
+            </div>                        
+            <!-- END WIDGET CLOCK -->
+
+        </div>
+    </div>
+    <!-- END WIDGETS -->                    
+
+    <div class="row">
+        <div class="col-md-4">
+
+            <!-- START USERS ACTIVITY BLOCK -->
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="panel-title-box">
+                        <h3>Users Activity</h3>
+                        <span>Users vs returning</span>
+                    </div>                                    
+                    <ul class="panel-controls" style="margin-top: 2px;">
+                        <li><a href="#" class="panel-fullscreen"><span class="fa fa-expand"></span></a></li>
+                        <li><a href="#" class="panel-refresh"><span class="fa fa-refresh"></span></a></li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="fa fa-cog"></span></a>                                        
+                            <ul class="dropdown-menu">
+                                <li><a href="#" class="panel-collapse"><span class="fa fa-angle-down"></span> Collapse</a></li>
+                                <li><a href="#" class="panel-remove"><span class="fa fa-times"></span> Remove</a></li>
+                            </ul>                                        
+                        </li>                                        
+                    </ul>                                    
+                </div>                                
+                <div class="panel-body padding-0">
+                    <div class="chart-holder" id="dashboard-bar-1" style="height: 200px;"></div>
+                </div>                                    
+            </div>
+            <!-- END USERS ACTIVITY BLOCK -->
+
+        </div>
+        <div class="col-md-4">
+
+            <!-- START VISITORS BLOCK -->
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="panel-title-box">
+                        <h3>Visitors</h3>
+                        <span>Visitors (last month)</span>
+                    </div>
+                    <ul class="panel-controls" style="margin-top: 2px;">
+                        <li><a href="#" class="panel-fullscreen"><span class="fa fa-expand"></span></a></li>
+                        <li><a href="#" class="panel-refresh"><span class="fa fa-refresh"></span></a></li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="fa fa-cog"></span></a>                                        
+                            <ul class="dropdown-menu">
+                                <li><a href="#" class="panel-collapse"><span class="fa fa-angle-down"></span> Collapse</a></li>
+                                <li><a href="#" class="panel-remove"><span class="fa fa-times"></span> Remove</a></li>
+                            </ul>                                        
+                        </li>                                        
+                    </ul>
+                </div>
+                <div class="panel-body padding-0">
+                    <div class="chart-holder" id="dashboard-donut-1" style="height: 200px;"></div>
                 </div>
             </div>
-            <div class="col-sm-8">
-                <div class="page-header float-right">
-                    <div class="page-title">
-                        <ol class="breadcrumb text-right">
-                            <li class="active">Dashboard</li>
-                        </ol>
-                    </div>
+            <!-- END VISITORS BLOCK -->
+
+        </div>
+
+        <div class="col-md-4">
+
+            <!-- START PROJECTS BLOCK -->
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="panel-title-box">
+                        <h3>Projects</h3>
+                        <span>Projects activity</span>
+                    </div>                                    
+                    <ul class="panel-controls" style="margin-top: 2px;">
+                        <li><a href="#" class="panel-fullscreen"><span class="fa fa-expand"></span></a></li>
+                        <li><a href="#" class="panel-refresh"><span class="fa fa-refresh"></span></a></li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="fa fa-cog"></span></a>                                        
+                            <ul class="dropdown-menu">
+                                <li><a href="#" class="panel-collapse"><span class="fa fa-angle-down"></span> Collapse</a></li>
+                                <li><a href="#" class="panel-remove"><span class="fa fa-times"></span> Remove</a></li>
+                            </ul>                                        
+                        </li>                                        
+                    </ul>
                 </div>
+                <div class="panel-body panel-body-table">
+
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th width="50%">Project</th>
+                                    <th width="20%">Status</th>
+                                    <th width="30%">Activity</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Joli Admin</strong></td>
+                                    <td><span class="label label-danger">Developing</span></td>
+                                    <td>
+                                        <div class="progress progress-small progress-striped active">
+                                            <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 85%;">85%</div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Gemini</strong></td>
+                                    <td><span class="label label-warning">Updating</span></td>
+                                    <td>
+                                        <div class="progress progress-small progress-striped active">
+                                            <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 40%;">40%</div>
+                                        </div>
+                                    </td>
+                                </tr>                                                
+                                <tr>
+                                    <td><strong>Taurus</strong></td>
+                                    <td><span class="label label-warning">Updating</span></td>
+                                    <td>
+                                        <div class="progress progress-small progress-striped active">
+                                            <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 72%;">72%</div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Leo</strong></td>
+                                    <td><span class="label label-success">Support</span></td>
+                                    <td>
+                                        <div class="progress progress-small progress-striped active">
+                                            <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 100%;">100%</div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Virgo</strong></td>
+                                    <td><span class="label label-success">Support</span></td>
+                                    <td>
+                                        <div class="progress progress-small progress-striped active">
+                                            <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 100%;">100%</div>
+                                        </div>
+                                    </td>
+                                </tr>                                                
+
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+            <!-- END PROJECTS BLOCK -->
+
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8">
+
+            <!-- START SALES BLOCK -->
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="panel-title-box">
+                        <h3>Sales</h3>
+                        <span>Sales activity by period you selected</span>
+                    </div>                                     
+                    <ul class="panel-controls panel-controls-title">                                        
+                        <li>
+                            <div id="reportrange" class="dtrange">                                            
+                                <span></span><b class="caret"></b>
+                            </div>                                     
+                        </li>                                
+                        <li><a href="#" class="panel-fullscreen rounded"><span class="fa fa-expand"></span></a></li>
+                    </ul>                                    
+
+                </div>
+                <div class="panel-body">                                    
+                    <div class="row stacked">
+                        <div class="col-md-4">                                            
+                            <div class="progress-list">                                               
+                                <div class="pull-left"><strong>In Queue</strong></div>
+                                <div class="pull-right">75%</div>                                                
+                                <div class="progress progress-small progress-striped active">
+                                    <div class="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 75%;">75%</div>
+                                </div>
+                            </div>
+                            <div class="progress-list">                                               
+                                <div class="pull-left"><strong>Shipped Products</strong></div>
+                                <div class="pull-right">450/500</div>                                                
+                                <div class="progress progress-small progress-striped active">
+                                    <div class="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 90%;">90%</div>
+                                </div>
+                            </div>
+                            <div class="progress-list">                                               
+                                <div class="pull-left"><strong class="text-danger">Returned Products</strong></div>
+                                <div class="pull-right">25/500</div>                                                
+                                <div class="progress progress-small progress-striped active">
+                                    <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 5%;">5%</div>
+                                </div>
+                            </div>
+                            <div class="progress-list">                                               
+                                <div class="pull-left"><strong class="text-warning">Progress Today</strong></div>
+                                <div class="pull-right">75/150</div>                                                
+                                <div class="progress progress-small progress-striped active">
+                                    <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 50%;">50%</div>
+                                </div>
+                            </div>
+                            <p><span class="fa fa-warning"></span> Data update in end of each hour. You can update it manual by pressign update button</p>
+                        </div>
+                        <div class="col-md-8">
+                            <div id="dashboard-map-seles" style="width: 100%; height: 200px"></div>
+                        </div>
+                    </div>                                    
+                </div>
+            </div>
+            <!-- END SALES BLOCK -->
+
+        </div>
+        <div class="common-modal modal fade" id="common-Modal1" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-content">
+                <ul class="list-inline item-details">
+                    <li><a href="http://themifycloud.com/downloads/janux-premium-responsive-bootstrap-admin-dashboard-template/">Admin templates</a></li>
+                    <li><a href="http://themescloud.org">Bootstrap themes</a></li>
+                </ul>
             </div>
         </div>
 
-        <div class="content mt-3">
+        <div class="col-md-4">
 
-
-           <div class="col-sm-6 col-lg-3">
-                <div class="card text-white bg-flat-color-1">
-                    <div class="card-body pb-0">
-                        <div class="dropdown float-right">
-                            <button class="btn bg-transparent dropdown-toggle theme-toggle text-light" type="button" id="dropdownMenuButton" data-toggle="dropdown">
-                                <i class="fa fa-cog"></i>
-                            </button>
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <div class="dropdown-menu-content">
-                                    <a class="dropdown-item" href="#">Action</a>
-                                    <a class="dropdown-item" href="#">Another action</a>
-                                    <a class="dropdown-item" href="#">Something else here</a>
-                                </div>
-                            </div>
-                        </div>
-                        <h4 class="mb-0">
-                            <span class="count">10468</span>
-                        </h4>
-                        <p class="text-light">Members online</p>
-
-                        <div class="chart-wrapper px-0" style="height:70px;" height="70">
-                            <canvas id="widgetChart1"></canvas>
-                        </div>
-
+            <!-- START SALES & EVENTS BLOCK -->
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="panel-title-box">
+                        <h3>Sales & Event</h3>
+                        <span>Event "Purchase Button"</span>
                     </div>
-
-                </div>
-            </div>
-            <!--/.col-->
-
-            <div class="col-sm-6 col-lg-3">
-                <div class="card text-white bg-flat-color-2">
-                    <div class="card-body pb-0">
-                        <div class="dropdown float-right">
-                            <button class="btn bg-transparent dropdown-toggle theme-toggle text-light" type="button" id="dropdownMenuButton" data-toggle="dropdown">
-                                <i class="fa fa-cog"></i>
-                            </button>
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <div class="dropdown-menu-content">
-                                    <a class="dropdown-item" href="#">Action</a>
-                                    <a class="dropdown-item" href="#">Another action</a>
-                                    <a class="dropdown-item" href="#">Something else here</a>
-                                </div>
-                            </div>
-                        </div>
-                        <h4 class="mb-0">
-                            <span class="count">10468</span>
-                        </h4>
-                        <p class="text-light">Members online</p>
-
-                        <div class="chart-wrapper px-0" style="height:70px;" height="70">
-                            <canvas id="widgetChart2"></canvas>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-            <!--/.col-->
-
-            <div class="col-sm-6 col-lg-3">
-                <div class="card text-white bg-flat-color-3">
-                    <div class="card-body pb-0">
-                        <div class="dropdown float-right">
-                            <button class="btn bg-transparent dropdown-toggle theme-toggle text-light" type="button" id="dropdownMenuButton" data-toggle="dropdown">
-                                <i class="fa fa-cog"></i>
-                            </button>
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <div class="dropdown-menu-content">
-                                    <a class="dropdown-item" href="#">Action</a>
-                                    <a class="dropdown-item" href="#">Another action</a>
-                                    <a class="dropdown-item" href="#">Something else here</a>
-                                </div>
-                            </div>
-                        </div>
-                        <h4 class="mb-0">
-                            <span class="count">10468</span>
-                        </h4>
-                        <p class="text-light">Members online</p>
-
-                    </div>
-
-                        <div class="chart-wrapper px-0" style="height:70px;" height="70">
-                            <canvas id="widgetChart3"></canvas>
-                        </div>
-                </div>
-            </div>
-            <!--/.col-->
-
-            <div class="col-sm-6 col-lg-3">
-                <div class="card text-white bg-flat-color-4">
-                    <div class="card-body pb-0">
-                        <div class="dropdown float-right">
-                            <button class="btn bg-transparent dropdown-toggle theme-toggle text-light" type="button" id="dropdownMenuButton" data-toggle="dropdown">
-                                <i class="fa fa-cog"></i>
-                            </button>
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <div class="dropdown-menu-content">
-                                    <a class="dropdown-item" href="#">Action</a>
-                                    <a class="dropdown-item" href="#">Another action</a>
-                                    <a class="dropdown-item" href="#">Something else here</a>
-                                </div>
-                            </div>
-                        </div>
-                        <h4 class="mb-0">
-                            <span class="count">10468</span>
-                        </h4>
-                        <p class="text-light">Members online</p>
-
-                        <div class="chart-wrapper px-3" style="height:70px;" height="70">
-                            <canvas id="widgetChart4"></canvas>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-            <!--/.col-->
-
-            <div class="col-lg-3 col-md-6">
-                <div class="social-box facebook">
-                    <i class="fa fa-facebook"></i>
-                    <ul>
-                        <li>
-                            <strong><span class="count">40</span> k</strong>
-                            <span>friends</span>
-                        </li>
-                        <li>
-                            <strong><span class="count">450</span></strong>
-                            <span>feeds</span>
-                        </li>
+                    <ul class="panel-controls" style="margin-top: 2px;">
+                        <li><a href="#" class="panel-fullscreen"><span class="fa fa-expand"></span></a></li>
+                        <li><a href="#" class="panel-refresh"><span class="fa fa-refresh"></span></a></li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="fa fa-cog"></span></a>                                        
+                            <ul class="dropdown-menu">
+                                <li><a href="#" class="panel-collapse"><span class="fa fa-angle-down"></span> Collapse</a></li>
+                                <li><a href="#" class="panel-remove"><span class="fa fa-times"></span> Remove</a></li>
+                            </ul>                                        
+                        </li>                                        
                     </ul>
                 </div>
-                <!--/social-box-->
-            </div><!--/.col-->
-
-
-            <div class="col-lg-3 col-md-6">
-                <div class="social-box twitter">
-                    <i class="fa fa-twitter"></i>
-                    <ul>
-                        <li>
-                            <strong><span class="count">30</span> k</strong>
-                            <span>friends</span>
-                        </li>
-                        <li>
-                            <strong><span class="count">450</span></strong>
-                            <span>tweets</span>
-                        </li>
-                    </ul>
-                </div>
-                <!--/social-box-->
-            </div><!--/.col-->
-
-
-            <div class="col-lg-3 col-md-6">
-                <div class="social-box linkedin">
-                    <i class="fa fa-linkedin"></i>
-                    <ul>
-                        <li>
-                            <strong><span class="count">40</span> +</strong>
-                            <span>contacts</span>
-                        </li>
-                        <li>
-                            <strong><span class="count">250</span></strong>
-                            <span>feeds</span>
-                        </li>
-                    </ul>
-                </div>
-                <!--/social-box-->
-            </div><!--/.col-->
-
-
-            <div class="col-lg-3 col-md-6">
-                <div class="social-box google-plus">
-                    <i class="fa fa-google-plus"></i>
-                    <ul>
-                        <li>
-                            <strong><span class="count">94</span> k</strong>
-                            <span>followers</span>
-                        </li>
-                        <li>
-                            <strong><span class="count">92</span></strong>
-                            <span>circles</span>
-                        </li>
-                    </ul>
-                </div>
-                <!--/social-box-->
-            </div><!--/.col-->
-
-            <div class="col-xl-6">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-sm-4">
-                                <h4 class="card-title mb-0">Traffic</h4>
-                                <div class="small text-muted">October 2017</div>
-                            </div>
-                            <!--/.col-->
-                            <div class="col-sm-8 hidden-sm-down">
-                                <button type="button" class="btn btn-primary float-right bg-flat-color-1"><i class="fa fa-cloud-download"></i></button>
-                                <div class="btn-toolbar float-right" role="toolbar" aria-label="Toolbar with button groups">
-                                    <div class="btn-group mr-3" data-toggle="buttons" aria-label="First group">
-                                        <label class="btn btn-outline-secondary">
-                                            <input type="radio" name="options" id="option1"> Day
-                                        </label>
-                                        <label class="btn btn-outline-secondary active">
-                                            <input type="radio" name="options" id="option2" checked=""> Month
-                                        </label>
-                                        <label class="btn btn-outline-secondary">
-                                            <input type="radio" name="options" id="option3"> Year
-                                        </label>
-                                    </div>
-                                </div>
-                            </div><!--/.col-->
-
-
-                        </div><!--/.row-->
-                        <div class="chart-wrapper mt-4" >
-                            <canvas id="trafficChart" style="height:200px;" height="200"></canvas>
-                        </div>
-
-                    </div>
-                    <div class="card-footer">
-                        <ul>
-                            <li>
-                                <div class="text-muted">Visits</div>
-                                <strong>29.703 Users (40%)</strong>
-                                <div class="progress progress-xs mt-2" style="height: 5px;">
-                                    <div class="progress-bar bg-success" role="progressbar" style="width: 40%;" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
-                                </div>
-                            </li>
-                            <li class="hidden-sm-down">
-                                <div class="text-muted">Unique</div>
-                                <strong>24.093 Users (20%)</strong>
-                                <div class="progress progress-xs mt-2" style="height: 5px;">
-                                    <div class="progress-bar bg-info" role="progressbar" style="width: 20%;" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="text-muted">Pageviews</div>
-                                <strong>78.706 Views (60%)</strong>
-                                <div class="progress progress-xs mt-2" style="height: 5px;">
-                                    <div class="progress-bar bg-warning" role="progressbar" style="width: 60%;" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
-                                </div>
-                            </li>
-                            <li class="hidden-sm-down">
-                                <div class="text-muted">New Users</div>
-                                <strong>22.123 Users (80%)</strong>
-                                <div class="progress progress-xs mt-2" style="height: 5px;">
-                                    <div class="progress-bar bg-danger" role="progressbar" style="width: 80%;" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
-                                </div>
-                            </li>
-                            <li class="hidden-sm-down">
-                                <div class="text-muted">Bounce Rate</div>
-                                <strong>40.15%</strong>
-                                <div class="progress progress-xs mt-2" style="height: 5px;">
-                                    <div class="progress-bar" role="progressbar" style="width: 40%;" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
+                <div class="panel-body padding-0">
+                    <div class="chart-holder" id="dashboard-line-1" style="height: 200px;"></div>
                 </div>
             </div>
+            <!-- END SALES & EVENTS BLOCK -->
 
-           <div class="col-xl-3 col-lg-6">
-                <section class="card">
-                    <div class="twt-feed blue-bg">
-                        <div class="corner-ribon black-ribon">
-                            <i class="fa fa-twitter"></i>
-                        </div>
-                        <div class="fa fa-twitter wtt-mark"></div>
+        </div>
+    </div>
 
-                        <div class="media">
-                            <a href="#">
-                                <img class="align-self-center rounded-circle mr-3" style="width:85px; height:85px;" alt="" src="images/admin.jpg">
-                            </a>
-                            <div class="media-body">
-                                <h2 class="text-white display-6">Jim Doe</h2>
-                                <p class="text-light">Project Manager</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="weather-category twt-category">
-                        <ul>
-                            <li class="active">
-                                <h5>750</h5>
-                                Tweets
-                            </li>
-                            <li>
-                                <h5>865</h5>
-                                Following
-                            </li>
-                            <li>
-                                <h5>3645</h5>
-                                Followers
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="twt-write col-sm-12">
-                        <textarea placeholder="Write your Tweet and Enter" rows="1" class="form-control t-text-area"></textarea>
-                    </div>
-                    <footer class="twt-footer">
-                        <a href="#"><i class="fa fa-camera"></i></a>
-                        <a href="#"><i class="fa fa-map-marker"></i></a>
-                        New Castle, UK
-                        <span class="pull-right">
-                            32
-                        </span>
-                    </footer>
-                </section>
-            </div>
+    <!-- START DASHBOARD CHART -->
+    <div class="chart-holder" id="dashboard-area-1" style="height: 200px;"></div>
+    <div class="block-full-width">
 
+    </div>                    
+    <!-- END DASHBOARD CHART -->
 
-            <div class="col-xl-3 col-lg-6">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="stat-widget-one">
-                            <div class="stat-icon dib"><i class="ti-money text-success border-success"></i></div>
-                            <div class="stat-content dib">
-                                <div class="stat-text">Total Profit</div>
-                                <div class="stat-digit">1,012</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-
-            <div class="col-xl-3 col-lg-6">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="stat-widget-one">
-                            <div class="stat-icon dib"><i class="ti-user text-primary border-primary"></i></div>
-                            <div class="stat-content dib">
-                                <div class="stat-text">New Customer</div>
-                                <div class="stat-digit">961</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-xl-3 col-lg-6">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="stat-widget-one">
-                            <div class="stat-icon dib"><i class="ti-layout-grid2 text-warning border-warning"></i></div>
-                            <div class="stat-content dib">
-                                <div class="stat-text">Active Projects</div>
-                                <div class="stat-digit">770</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-xl-6">
-                <div class="card" >
-                    <div class="card-header">
-                        <h4>World</h4>
-                    </div>
-                    <div class="Vector-map-js">
-                        <div id="vmap" class="vmap" style="height: 265px;"></div>
-                    </div>
-                </div>
-                <!-- /# card -->
-            </div>
-
-
-        </div> <!-- .content -->
+</div>
+<!-- END PAGE CONTENT WRAPPER -->                                
 @endsection
 
 @section('footer')
-	<script src="{{asset('admin_assets/assets/js/lib/chart-js/Chart.bundle.js')}}"></script>
-    <script src="{{asset('admin_assets/assets/js/dashboard.js')}}"></script>
-    <script src="{{asset('admin_assets/assets/js/widgets.js')}}"></script>
-    <script src="{{asset('admin_assets/assets/js/lib/vector-map/jquery.vmap.js')}}"></script>
-    <script src="{{asset('admin_assets/assets/js/lib/vector-map/jquery.vmap.min.js')}}"></script>
-    <script src="{{asset('admin_assets/assets/js/lib/vector-map/jquery.vmap.sampledata.js')}}"></script>
-    <script src="{{asset('admin_assets/assets/js/lib/vector-map/country/jquery.vmap.world.js')}}"></script>
+    <!-- START THIS PAGE PLUGINS-->        
+    <script type='text/javascript' src='{{asset('')}}admin_assets/js/plugins/icheck/icheck.min.js'></script>        
+    <script type="text/javascript" src="{{asset('')}}admin_assets/js/plugins/mcustomscrollbar/jquery.mCustomScrollbar.min.js"></script>
+    <script type="text/javascript" src="{{asset('')}}admin_assets/js/plugins/scrolltotop/scrolltopcontrol.js"></script>
 
-    <script>
-        ( function ( $ ) {
-            "use strict";
+    <script type="text/javascript" src="{{asset('')}}admin_assets/js/plugins/morris/raphael-min.js"></script>
+    <script type="text/javascript" src="{{asset('')}}admin_assets/js/plugins/morris/morris.min.js"></script>       
+    <script type="text/javascript" src="{{asset('')}}admin_assets/js/plugins/rickshaw/d3.v3.js"></script>
+    <script type="text/javascript" src="{{asset('')}}admin_assets/js/plugins/rickshaw/rickshaw.min.js"></script>
+    <script type='text/javascript' src='{{asset('')}}admin_assets/js/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js'></script>
+    <script type='text/javascript' src='{{asset('')}}admin_assets/js/plugins/jvectormap/jquery-jvectormap-world-mill-en.js'></script>                
+    <script type='text/javascript' src='{{asset('')}}admin_assets/js/plugins/bootstrap/bootstrap-datepicker.js'></script>                
+    <script type="text/javascript" src="{{asset('')}}admin_assets/js/plugins/owl/owl.carousel.min.js"></script>                 
 
-            jQuery( '#vmap' ).vectorMap( {
-                map: 'world_en',
-                backgroundColor: null,
-                color: '#ffffff',
-                hoverOpacity: 0.7,
-                selectedColor: '#1de9b6',
-                enableZoom: true,
-                showTooltip: true,
-                values: sample_data,
-                scaleColors: [ '#1de9b6', '#03a9f5' ],
-                normalizeFunction: 'polynomial'
-            } );
-        } )( jQuery );
-    </script>
+    <script type="text/javascript" src="{{asset('')}}admin_assets/js/plugins/moment.min.js"></script>
+    <script type="text/javascript" src="{{asset('')}}admin_assets/js/plugins/daterangepicker/daterangepicker.js"></script>
+    
+    <script type="text/javascript" src="{{asset('')}}admin_assets/js/demo_dashboard.js"></script>
+    <!-- END THIS PAGE PLUGINS-->        
+
+    <!-- START TEMPLATE -->
+    <script type="text/javascript" src="{{asset('')}}admin_assets/js/settings.js"></script>
+    <script type="text/javascript" src="{{asset('')}}admin_assets/js/plugins.js"></script>        
+    <script type="text/javascript" src="{{asset('')}}admin_assets/js/actions.js"></script>
+    <!-- END TEMPLATE -->
 @endsection

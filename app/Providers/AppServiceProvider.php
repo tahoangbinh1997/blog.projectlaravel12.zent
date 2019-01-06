@@ -26,6 +26,9 @@ class AppServiceProvider extends ServiceProvider
             view()->share('tags', \App\Tag::get());
 
             view()->share('comment_counts', \App\Comment::get());
+
+            view()->share('users', \App\User::get());
+
         }
     }
 

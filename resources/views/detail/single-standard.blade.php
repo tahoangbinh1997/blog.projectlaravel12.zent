@@ -3,6 +3,7 @@
 
 @section('header')
 <title>Bài viết: {{$post->title}}</title>
+{{-- <meta name="csrf-token" content="{{csrf_token()}}">​ --}}
 @endsection
 
 @section('style')
@@ -28,18 +29,34 @@ active
                 $date = new DateTime($post->created_at); // tạo biến mới để đổi kiểu thời gian mặc định của csdl
                 $month_num = $date->format('m'); //lấy ra tháng
                 $convert_month = DateTime::createFromFormat('!m',$month_num); //convert tháng sang kiểu chữ
-                @endphp
-                {{$convert_month->format('F')}} {{$date->format('d')}}, {{$date->format('Y')}}
+            @endphp
+            {{$convert_month->format('F')}} {{$date->format('d')}}, {{$date->format('Y')}}
             </span> &bullet;
             <span class="ml-2"><span class="fa fa-comments"></span>
             @php $dem = 0; @endphp
             @foreach($comment_counts as $counts)
             @if($post->id == $counts->post_id)
-            @php $dem++; @endphp
+            @php $dem++; @endphp {{-- mỗi lần tìm thấy 1 comment trong bài post thì biến đếm tăng lên 1 đơn vị --}}
             @endif
             @endforeach
             {{$dem}}
+            <span class="ml-2"><span class="fa fa-thumbs-up"></span>
+            <span id="post-like">{{$post->like}}</span>
+            <span class="ml-2"><span class="fa fa-thumbs-down"></span>
+            <span id="post-dislike">{{$post->dislike}}</span>
         </span>
+        <form method="GET" style="float: right;" role="form" id="form-post-dislike" data-url="{{asset('')}}dislike/{{$post->slug}}">
+            @csrf
+            <button type="submit" class="btn">
+                Dislike
+            </button>
+        </form>
+        <form method="GET" style="float: right;margin-right: 10px;" role="form" id="form-post-like" data-url="{{asset('')}}like/{{$post->slug}}">
+            @csrf
+            <button type="submit" class="btn">
+                Like
+            </button>
+        </form>
     </div>
     <div class="post-content-body">
       <div class="row mb-5">
@@ -48,7 +65,7 @@ active
         </div>
     </div>
     <content>{!!$post->content!!}</content>
-</div>
+    </div>
 
 
 <div class="pt-5">
@@ -224,4 +241,69 @@ active
 </div>
 </div>
 
+@endsection
+
+@section('footer')
+<script type="text/javascript" charset="utf-8">
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+</script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#form-post-like').on('submit', function(event) {
+            event.preventDefault();
+            var url = $(this).data('url');
+            $.ajax({
+                type: 'get',
+                url: url,
+                success: function(response) {
+                    if ($('#form-post-like button').hasClass('btn-primary')) {
+                        $('#form-post-like button').removeClass('btn-primary');
+                    } else {
+                        $('#form-post-like button').addClass('btn-primary');
+                        $('#form-post-dislike button').removeClass('btn-warning');
+                    }
+                    $('#post-like').text(response.post_res.like);
+                    $('#post-dislike').text(response.post_res.dislike);
+                },
+                error: function (error) {
+
+                }
+            })
+        });
+        @if(isset($rela_post_like))
+            $('#form-post-like button').addClass('btn-primary');
+        @endif
+    });
+
+    $(document).ready(function() {
+        $('#form-post-dislike').on('submit', function(event) {
+            event.preventDefault();
+            var url = $(this).data('url');
+            $.ajax({
+                type: 'get',
+                url: url,
+                success: function(response) {
+                    if ($('#form-post-dislike button').hasClass('btn-warning')) {
+                        $('#form-post-dislike button').removeClass('btn-warning');
+                    } else {
+                        $('#form-post-dislike button').addClass('btn-warning');
+                        $('#form-post-like button').removeClass('btn-primary');
+                    }
+                    $('#post-like').text(response.post_res.like);
+                    $('#post-dislike').text(response.post_res.dislike);
+                },
+                error: function (error) {
+
+                }
+            })
+        });
+        @if(isset($rela_post_dislike))
+            $('#form-post-dislike button').addClass('btn-warning');
+        @endif
+    });
+</script>
 @endsection

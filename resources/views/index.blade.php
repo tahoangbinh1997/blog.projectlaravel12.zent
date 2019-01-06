@@ -15,6 +15,10 @@ if (!isset($q)) {
 @endphp
 @endsection
 
+@section('active-home')
+active
+@endsection
+
 @section('slide_header')
     <section class="site-section pt-5">
       <div class="container">
@@ -46,7 +50,7 @@ if (!isset($q)) {
                                     $convert_month = DateTime::createFromFormat('!m',$month_num); //convert tháng sang kiểu chữ
                                   @endphp
                                 {{$convert_month->format('F')}} {{$date->format('d')}}, {{$date->format('Y')}}
-                              </span> &bullet;
+                              </span> &bullet;<br>
                               <span class="ml-2"><span class="fa fa-comments"></span>
                                 @php $dem = 0; @endphp
                                 @foreach($comment_counts as $counts)
@@ -55,9 +59,20 @@ if (!isset($q)) {
                                 @endif
                                 @endforeach
                                 {{$dem}}
+                                <span class="ml-2"><span class="fa fa-thumbs-up"></span>
+                                <span id="post-like">{{$post->like}}</span>
+                                <span class="ml-2"><span class="fa fa-thumbs-down"></span>
+                                <span id="post-dislike">{{$post->dislike}}</span>
                               </span>
                             </div>
-                            <span class="mr-2" style="color: white;">Đăng bởi: Tạ Hoàng Bình</span>
+                            <span class="mr-2" style="color: white;">
+                              Đăng bởi: 
+                              @foreach($users as $user)
+                                @if($user->id == $post->user_id)
+                                  {{$user->name}}
+                                @endif
+                              @endforeach
+                            </span>
                             <a href="{{asset('')}}detail/{{$post->slug}}"><h3>{{$post->title}}</h3></a>
                             <p>{{$post->description}}</p>
                           </div>
@@ -95,7 +110,7 @@ if (!isset($q)) {
                                                 $convert_month = DateTime::createFromFormat('!m',$month_num); //convert tháng sang kiểu chữ
                                               @endphp
                                             {{$convert_month->format('F')}} {{$date->format('d')}}, {{$date->format('Y')}}
-                                      </span> &bullet;
+                                      </span> &bullet;<br>
                                       <span class="ml-2"><span class="fa fa-comments"></span>
                                         @php $dem = 0; @endphp
                                         @foreach($comment_counts as $counts)
@@ -104,10 +119,21 @@ if (!isset($q)) {
                                         @endif
                                         @endforeach
                                         {{$dem}}
+                                        <span class="ml-2"><span class="fa fa-thumbs-up"></span>
+                                        <span id="post-like">{{$post->like}}</span>
+                                        <span class="ml-2"><span class="fa fa-thumbs-down"></span>
+                                        <span id="post-dislike">{{$post->dislike}}</span>
                                       </span>
                                     </div>
                                     <a href="{{asset('')}}detail/{{$post->slug}}"><h3>{{$post->title}}</h3></a><br>
-                                    <span class="mr-2" style="color: white;">Đăng bởi: Tạ Hoàng Bình</span>
+                                    <span class="mr-2" style="color: white;">
+                                      Đăng bởi: 
+                                      @foreach($users as $user)
+                                      @if($user->id == $post->user_id)
+                                      {{$user->name}}
+                                      @endif
+                                      @endforeach
+                                    </span>
                                   </div>
                                 </div>
                           </div>
@@ -160,7 +186,7 @@ if (!isset($q)) {
                                 $convert_month = DateTime::createFromFormat('!m',$month_num); //convert tháng sang kiểu chữ
                               @endphp
                                 {{$convert_month->format('F')}} {{$date->format('d')}}, {{$date->format('Y')}}
-                          </span> 
+                          </span> <br>
                           <span class="ml-2"><span class="fa fa-comments"></span>
                             @php $dem = 0; @endphp
                             @foreach($comment_counts as $counts)
@@ -169,10 +195,21 @@ if (!isset($q)) {
                             @endif
                             @endforeach
                             {{$dem}}
+                            <span class="ml-2"><span class="fa fa-thumbs-up"></span>
+                            <span id="post-like">{{$post->like}}</span>
+                            <span class="ml-2"><span class="fa fa-thumbs-down"></span>
+                            <span id="post-dislike">{{$post->dislike}}</span>
                           </span>
                         </div>
                         <a href="{{asset('')}}detail/{{$post->slug}}"><h2>{{$post->title}}</h2></a>
-                        <span class="mr-2" style="color: black;">Đăng bởi: Tạ Hoàng Bình</span>
+                        <span class="mr-2" style="color: black;">
+                          Đăng bởi: 
+                          @foreach($users as $user)
+                          @if($user->id == $post->user_id)
+                          {{$user->name}}
+                          @endif
+                          @endforeach
+                        </span>
                       </div>
                     </div>
                   </div>
@@ -292,7 +329,7 @@ if (!isset($q)) {
                                         $convert_month = DateTime::createFromFormat('!m',$month_num); //convert tháng sang kiểu chữ
                                     @endphp
                                         {{$convert_month->format('F')}} {{$date->format('d')}}, {{$date->format('Y')}}
-                                </span> &bullet;
+                                </span> &bullet;<br/>
                                 <span class="ml-2"><span class="fa fa-comments"></span>
                                   @php $dem = 0; @endphp
                                   @foreach($comment_counts as $counts)
@@ -301,10 +338,21 @@ if (!isset($q)) {
                                   @endif
                                   @endforeach
                                   {{$dem}}
+                                  <span class="ml-2"><span class="fa fa-thumbs-up"></span>
+                                  <span id="post-like">{{$post->like}}</span>
+                                  <span class="ml-2"><span class="fa fa-thumbs-down"></span>
+                                  <span id="post-dislike">{{$post->dislike}}</span>
                                 </span>
                               </div>
                               <h2>{{$post->title}}</h2><br>
-                              <span class="mr-2" style="color: black;">Đăng bởi: Tạ Hoàng Bình</span>
+                              <span class="mr-2" style="color: black;">
+                                Đăng bởi: 
+                                @foreach($users as $user)
+                                @if($user->id == $post->user_id)
+                                {{$user->name}}
+                                @endif
+                                @endforeach
+                              </span>
                             </span>
                           </a>
                         </div>  

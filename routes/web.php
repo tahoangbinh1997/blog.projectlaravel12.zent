@@ -27,16 +27,26 @@ Route::get('tag/{slug}','BlogController@tag');
 
 Route::get('search','BlogController@search');
 
-Auth::routes();
+Route::get('like/{slug}','BlogController@like_posts');
 
-Route::get('/admin-home', 'HomeController@admin_home')->name('admin-home');
+Route::get('dislike/{slug}','BlogController@dislike_posts');
 
-Route::get('/admin-home/manager-posts/get-list-post','PostController@getListPost')->name('getListPost');
+Route::prefix('/admin')->group(function(){
+	Auth::routes();
 
-Route::put('/admin-home/manager-posts/{id}/show-update','PostController@update')->name('post.update');
+	Route::get('/home', 'HomeController@admin_home')->name('admin-home');
 
-Route::get('/admin-home/manager-posts/show-post/{id}','PostController@show')->name('post.show');
+	Route::get('/home/manager-posts', 'PostController@admin_posts')->name('admin-posts');
 
-Route::get('/admin-home/manager-posts/edit-post/{id}','PostController@edit')->name('post.edit');
+	Route::get('/home/manager-posts/create', 'PostController@create')->name('admin-posts-create');
 
-Route::get('/admin-home/manager-posts', 'HomeController@admin_posts')->name('admin-posts');
+	Route::post('/home/manager-posts/store', 'PostController@store')->name('admin-posts-store');
+
+	// Route::get('/home/manager-posts/get-list-post','PostController@getListPost')->name('getListPost');
+
+	// Route::put('/home/manager-posts/{id}/show-update','PostController@update')->name('post.update');
+
+	// Route::get('/home/manager-posts/show-post/{id}','PostController@show')->name('post.show');
+
+	// Route::get('/home/manager-posts/edit-post/{id}','PostController@edit')->name('post.edit');
+});

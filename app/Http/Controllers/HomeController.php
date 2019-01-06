@@ -31,9 +31,4 @@ class HomeController extends Controller
     {
         return view('admin.admin-home');
     }
-
-    public function admin_posts()
-    {
-        return view('admin.posts.list');
-    }
 }
