@@ -391,9 +391,5 @@
     <script type="text/javascript" src="{{asset('')}}admin_assets/js/demo_dashboard.js"></script>
     <!-- END THIS PAGE PLUGINS-->        
 
-    <!-- START TEMPLATE -->
-    <script type="text/javascript" src="{{asset('')}}admin_assets/js/settings.js"></script>
-    <script type="text/javascript" src="{{asset('')}}admin_assets/js/plugins.js"></script>        
-    <script type="text/javascript" src="{{asset('')}}admin_assets/js/actions.js"></script>
-    <!-- END TEMPLATE -->
+    
 @endsection

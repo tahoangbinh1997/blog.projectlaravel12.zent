@@ -1,5 +1,13 @@
 @extends('layouts.admin-temp')
 
+@section('posts-active')
+    active
+@endsection
+
+@section('posts')
+    active
+@endsection
+
 @section('header')
 <meta name="csrf-token" content="{{ csrf_token() }}">
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.css">
@@ -20,35 +28,28 @@
 </style>
 @endsection
 
-@section('posts-active')
-active
-@endsection
-
-@section('posts')
-    active
-@endsection
-
 @section('content')
 <!-- START BREADCRUMB -->
 <ul class="breadcrumb">
 	<li><a href="{{asset('')}}admin/home">Home</a></li>
 	<li><a href="{{asset('')}}admin/home/manager-posts">Quản lý bài viết</a></li>
-	<li class="active">Thêm mới bài viết</li>
+	<li class="active">Cập nhật thông tin bài viết</li>
 </ul>
 
 <!-- END BREADCRUMB -->
 
 <!-- PAGE TITLE -->
 <div class="page-title">                    
-	<h2><span class="fa fa-arrow-circle-o-left"></span> Thêm Mới Bài Viết</h2>
+	<h2><span class="fa fa-arrow-circle-o-left"></span> Cập Nhật Thông Tin Bài Viết</h2>
 </div>
 <!-- END PAGE TITLE -->                
 
 <!-- PAGE CONTENT WRAPPER -->
 <div class="page-content-wrap">
 	<div class="row">
-		<form method="POST" id="form_validate" action="{{route('admin-posts-store')}}" {{-- action="javascript:alert('Form #validate submited');" --}} enctype="multipart/form-data" class="form-horizontal">
+		<form method="POST" id="form_validate" action="{{route('admin-posts-update' , ['id' => $post->id])}}" {{-- action="javascript:alert('Form #validate submited');" --}} enctype="multipart/form-data" class="form-horizontal">
 			@csrf
+			{{method_field('patch')}}
 		<div class="col-md-8">
 			<div class="panel panel-default">
 				<div class="panel-body post-info-important">
@@ -58,7 +59,7 @@ active
 					<div class="row">
 						<div class="input-group" title="Tiêu đề bài viết" data-toggle="tooltip" >
 							<div class="input-group-addon"><i class="glyphicon glyphicon-edit"></i></div>
-							<input type="text" name="title" id="title" class="validate[required] form-control" value="{{old('title')}}" />
+							<input type="text" name="title" id="title" class="form-control" value="{{$post->title}}" />
 						</div>
 						@if($errors->has('title'))
 						<p style="color: red;">
@@ -70,7 +71,7 @@ active
 						<b>Tóm tắt (<span style="color: red;">*</span>)</b>
 					</div>
 					<div class="row" title="Tóm tắt bài viết" data-toggle="tooltip" >
-						<textarea name="description" class="validate[required] form-control" id="description" rows="5" style="resize: none;" value="{{old('description')}}" ></textarea>
+						<textarea name="description" class="form-control" id="description" rows="5" style="resize: none;" >{{$post->description}}</textarea>
 						@if($errors->has('description'))
 						<p style="color: red;">
 							{{$errors->first('description')}}
@@ -81,7 +82,7 @@ active
 						<b>Ảnh bài viết (<span style="color: red;">*</span>)</b>
 					</div>
 					<div class="row" title="Ảnh của bài viết" data-toggle="tooltip" >
-						<input type="file" class="file" name="thumbnail" data-preview-file-type="any" value="{{old('thumbnail')}}" />
+						<input type="file" class="file" value="{{$post->thumbnail}}" name="thumbnail" data-preview-file-type="any"/>
 						@if($errors->has('thumbnail'))
 						<p style="color: red;">
 							{{$errors->first('thumbnail')}}
@@ -93,7 +94,7 @@ active
 					</div>
 					<div class="row post_content_base" title="Nội dung bài viết" data-toggle="tooltip" >
 						<textarea name="content" class="validate[required] form-control" id="content" rows="10" cols="80">
-							{{old('content')}}
+							{{$post->content}}
 						</textarea>
 						@if($errors->has('content'))
 						<p style="color: red;">
@@ -123,7 +124,7 @@ active
 					@endif
 				</div>
 				<div class="panel-footer">
-					<button class="btn btn-info pull-right" name="submit_create" type="submit" style="font-size: 13px;font-weight: bold;">Lưu</button>
+					<button class="btn btn-info pull-right" name="submit_update" type="submit" style="font-size: 13px;font-weight: bold;">Lưu</button>
 				</div>                                                                                          
 			</div>
 			<!-- END PANEL WITH REFRESH CALLBACKS -->
@@ -136,7 +137,9 @@ active
 				<div class="panel-body" title="Thể loại" data-toggle="tooltip" >
 					@foreach($categories as $category)
 					<div class="col-md-12">                                    
-						<label class="check"><input type="radio" class="iradio" name="category_id" value="{{$category->id}}" /> {{$category->name}}</label>
+						<label class="check">
+							<input type="radio" class="iradio" name="category_id" value="{{$category->id}}" @if($post->category_id == $category->id) checked @endif/> {{$category->name}}
+						</label>
 					</div>
 					@endforeach
 					@if($errors->has('category_id'))
@@ -155,9 +158,13 @@ active
 				</div>
 				<div class="panel-body" title="Thẻ tags" data-toggle="tooltip" >
 					<div class="form-group">
-						<div class="col-md-12">
+						<div class="col-md-12 post_tags_base">
 							<select multiple name="tags[]" data-role="tagsinput" size="100%">
+								@foreach($post_tags as $post_tag) 
+									<option value="{{$post_tag->name}}">{{$post_tag->name}}</option>
+								@endforeach
 							</select>
+							<input type="hidden" name="delete_tags" id="delete_tags" value=""/>
 							@if($errors->has('tags'))
 							<p style="color: red;">
 								{{$errors->first('tags')}}
@@ -233,17 +240,23 @@ active
     $(document).ready(function() {
     	CKEDITOR.replace( 'content' );
     	$('button.kv-fileinput-upload').remove();
-    		$('.file-preview-status').append('<p>Mời bạn chọn ảnh</p>');
-    	$('.btn-file').click(function(){
-    		$('.file-preview-status>p').remove();
-    	})
+    	$('.file-preview-thumbnails').append('<div class="file-preview-frame"><img style="width: auto;height: 160px;" src="{{asset('storage')}}/{{$post->thumbnail}}"/></div>');
     	$('.fileinput-remove-button').click(function(){
-    		$('.file-preview-status').append('<p>Mời bạn chọn ảnh</p>');
+    		$('.file-preview-thumbnails').append('<div class="file-preview-frame"><img style="width: auto;height: 160px;" src="{{asset('storage')}}/{{$post->thumbnail}}"/></div>');
+    		$('.file-preview-frame').change(function(){
+    			$('this').append('<div class="file-preview-frame"><img style="width: auto;height: 160px;" src="{{asset('storage')}}/{{$post->thumbnail}}"/></div>');
+    		})
+    	})
+    	$('.label-info>span').addClass('button_remove');
+    	var delete_tags = [];
+    	$('.bootstrap-tagsinput').each(function(){
+    		$('span.button_remove').on('click', function(event) {
+    			delete_tags[delete_tags.length]=$(this).parent('.label-info').text();
+    			$('#delete_tags').attr('value', delete_tags);
+    		});
     	})
     });
 
 </script>
 <!-- END PAGE PLUGINS -->
 @endsection
-
-

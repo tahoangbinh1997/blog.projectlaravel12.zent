@@ -12,6 +12,9 @@
         
         <!-- CSS INCLUDE -->        
         <link rel="stylesheet" type="text/css" id="theme" href="{{asset('')}}admin_assets/css/theme-default.css"/>
+        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.33.1/sweetalert2.min.css">
+        <meta name="csrf-token" content="{{ csrf_token() }}">
         <!-- EOF CSS INCLUDE -->                                    
         @yield('header')
     </head>
@@ -29,14 +32,14 @@
                     </li>
                     <li class="xn-profile">
                         <a href="#" class="profile-mini">
-                            <img src="{{asset('')}}admin_assets/img/user_1.jpg" alt="Tạ Hoàng Bình"/>
+                            <img src="{{asset('storage')}}/{{ Auth::user()->user_pic }}" alt="{{ Auth::user()->name }}"/>
                         </a>
                         <div class="profile">
                             <div class="profile-image">
-                                <img src="{{asset('')}}admin_assets/img/user_1.jpg" alt="Tạ Hoàng Bình"/>
+                                <img src="{{asset('storage')}}/{{ Auth::user()->user_pic }}" alt="{{ Auth::user()->name }}"/>
                             </div>
                             <div class="profile-data">
-                                <div class="profile-data-name">Tạ Hoàng Bình</div>
+                                <div class="profile-data-name">{{ Auth::user()->name }}</div>
                                 <div class="profile-data-title">Web Developer/Designer</div>
                             </div>
                             <div class="profile-controls">
@@ -50,10 +53,28 @@
                         <a href="{{asset('')}}admin/home"><span class="fa fa-desktop"></span> <span class="xn-text">Dashboard</span></a>                        
                     </li>                    
                     <li class="xn-title">Bài viết</li>
-                    <li class="@yield('posts-active')">
-                        <a href="{{asset('')}}admin/home/manager-posts"><span class="fa fa-files-o"></span> <span class="xn-text">Quản Lý Bài Viết</span></a>
+                    <li class="@yield('posts') xn-openable">
+                        <a href="#"><span class="fa fa-files-o"></span> <span class="xn-text">Quản Lý Bài Viết</span></a>
+                        <ul>
+                            <li class="@yield('posts-active')"><a href="{{route('admin-posts')}}">Bài viết chính</a></li>
+                            <li class="@yield('trash-posts')"><a href="{{route('admin-trash-posts')}}">Bài viết rác</a></li>
+                            <li class="@yield('delete-posts')"><a href="{{route('admin-delete-posts')}}">Bài viết đã bị xóa</a></li>
+                        </ul>
                     </li>
                     
+                    <li class="@yield('tags') xn-openable">
+                        <a href="#"><span class="glyphicon glyphicon-tags"></span> <span class="xn-text">Quản Lý Tags</span></a>
+                        <ul>
+                            <li class="@yield('tags-active')"><a href="{{route('admin-tags')}}">Tất cả các tags</a></li>
+                        </ul>
+                    </li>
+                    
+                    <li class="@yield('categories') xn-openable">
+                        <a href="#"><span class="glyphicon glyphicon-tags"></span> <span class="xn-text">Quản Lý Thể Loại</span></a>
+                        <ul>
+                            <li class="@yield('categories-active')"><a href="{{route('admin-categories')}}">Tất cả các categories</a></li>
+                        </ul>
+                    </li>
                 </ul>
                 <!-- END X-NAVIGATION -->
             </div>
@@ -219,7 +240,22 @@
 
         @yield('footer')
 
+        <!-- START TEMPLATE -->
+        <script type="text/javascript" src="{{asset('')}}admin_assets/js/settings.js"></script>
+        <script type="text/javascript" src="{{asset('')}}admin_assets/js/plugins.js"></script>        
+        <script type="text/javascript" src="{{asset('')}}admin_assets/js/actions.js"></script>
+        <!-- END TEMPLATE -->
         
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.33.1/sweetalert2.min.js"></script>
+        
+        <script type="text/javascript" charset="utf-8">
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+        </script>
     <!-- END SCRIPTS -->         
     </body>
 </html>

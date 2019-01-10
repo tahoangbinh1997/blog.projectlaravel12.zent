@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Post extends Model
 {
-	protected $fillable= ['title','thumbnail','description','content','slug','category_id','user_id','created_at','updated_at'];
+	protected $fillable= ['title','thumbnail','delete_at','post_status','description','content','slug','category_id','user_id','created_at','updated_at'];
     public function category() {
     	return $this->belongsTo('App\Category');
     }
@@ -25,5 +25,9 @@ class Post extends Model
 
     public function dislikes(){
         return $this->belongsToMany('App\Dislike','post_dislikes','post_id','dislike_id');
+    }
+
+    public function user(){
+        return $this->belongsTo('App\User');
     }
 }

@@ -29,7 +29,7 @@ active
               @foreach($top_posts as $key => $post)
                     @if($key <= 5)
                         <div>
-                        <div class="a-block d-flex align-items-center height-lg" style="background-image: url('{{asset('storage/images')}}/{{$post->thumbnail}}'); ">
+                        <div class="a-block d-flex align-items-center height-lg" style="background-image: url('{{asset('storage')}}/{{$post->thumbnail}}'); ">
                           <div class="text half-to-full">
                             <div class="post-meta">
                               <span class="category">
@@ -90,7 +90,7 @@ active
                 @foreach($top_posts as $key => $post)
                         @if($key <= 2)
                             <div class="col-md-6 col-lg-4">
-                                <div class="a-block d-flex align-items-center height-md" style="background-image: url('{{asset('storage/images')}}/{{$post->thumbnail}}'); ">
+                                <div class="a-block d-flex align-items-center height-md" style="background-image: url('{{asset('storage')}}/{{$post->thumbnail}}'); ">
                                   <div class="text">
                                     <div class="post-meta">
                                         @foreach($categories as $category)
@@ -167,7 +167,7 @@ active
                 @if($key <= $sum_posts/2)
                   <div class="col-md-6">
                     <div class="blog-entry element-animate" data-animate-effect="fadeIn">
-                      <a href="{{asset('')}}detail/{{$post->slug}}"><img src="{{asset('storage/images')}}/{{$post->thumbnail}}" alt="Image placeholder"></a>
+                      <a href="{{asset('')}}detail/{{$post->slug}}"><img src="{{asset('storage')}}/{{$post->thumbnail}}" alt="Image placeholder"></a>
                       <div class="blog-content-body">
                         <div class="post-meta">
                           @foreach($categories as $category)
@@ -312,7 +312,7 @@ active
                     @if($key > $sum_posts/2)
                         <div class="post-entry-horzontal">
                           <a href="{{asset('')}}detail/{{$post->slug}}">
-                            <div class="image element-animate"  data-animate-effect="fadeIn" style="background-image: url({{asset('storage/images')}}/{{$post->thumbnail}});"></div>
+                            <div class="image element-animate"  data-animate-effect="fadeIn" style="background-image: url({{asset('storage')}}/{{$post->thumbnail}});"></div>
                             <span class="text" style="display: block;">
                               <div class="post-meta">
                                 @foreach($categories as $category)

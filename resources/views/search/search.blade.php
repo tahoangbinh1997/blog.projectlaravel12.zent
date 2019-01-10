@@ -23,7 +23,7 @@
                 @foreach($posts as $key => $post)
                   <div class="col-md-6">
                     <div class="blog-entry element-animate" data-animate-effect="fadeIn">
-                      <a href="{{asset('')}}detail/{{$post->slug}}"><img src="{{asset('storage/images')}}/{{$post->thumbnail}}" alt="Image placeholder"></a>
+                      <a href="{{asset('')}}detail/{{$post->slug}}"><img src="{{asset('storage')}}/{{$post->thumbnail}}" alt="Image placeholder"></a>
                       <div class="blog-content-body">
                         <div class="post-meta">
                           @foreach($categories as $category)
@@ -54,7 +54,14 @@
                           </span>
                         </div>
                         <a href="{{asset('')}}detail/{{$post->slug}}"><h2>{{$post->title}}</h2></a>
-                        <span class="mr-2" style="color: black;">Đăng bởi: Tạ Hoàng Bình</span>
+                        <span class="mr-2" style="color: black;">
+                          Đăng bởi: 
+                          @foreach($users as $user)
+                          @if($user->id == $post->user_id)
+                          {{$user->name}}
+                          @endif
+                          @endforeach
+                        </span>
                       </div>
                     </div>
                   </div>

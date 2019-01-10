@@ -19,8 +19,14 @@ class BlogController extends Controller
      */
     public function index()
     {
-        $top_posts = \App\Post::orderBy('view_count','desc')->get();
-        $posts = \App\Post::Paginate(6);
+        $top_posts = \App\Post::where([
+            ['post_status','=',1],
+            ['delete_at','=',0]
+        ])->orderBy('view_count','desc')->get();
+        $posts = \App\Post::where([
+            ['post_status','=',1],
+            ['delete_at','=',0]
+        ])->Paginate(6);
         $sum_posts = $posts->count();
 
         $categories = \App\Category::get();
@@ -46,7 +52,11 @@ class BlogController extends Controller
      */
     public function store(Request $request, $slug)
     {
-        $post = \App\Post::where('slug', $slug)->firstOrFail();
+        $post = \App\Post::where([
+            ['post_status','=',1],
+            ['delete_at','=',0],
+            ['slug', $slug]
+        ])->firstOrFail();
         $post->view_count = $post->view_count-1;
         $post->save();
         if (isset($_POST['submit'])) {
@@ -55,7 +65,7 @@ class BlogController extends Controller
                 [
                     'name' => 'required|min:5|max:255',
                     'email' => 'required|min:8|email',
-                    'website' => 'required|',
+                    'comments_pic' => 'required|',
                     'message' => 'required'
                 ],
 
@@ -69,7 +79,7 @@ class BlogController extends Controller
                 [
                     'name' => 'Họ Tên',
                     'email' => 'Email',
-                    'website' => 'Website',
+                    'comments_pic' => 'Ảnh',
                     'message' => 'Message'
                 ]
 
@@ -79,10 +89,11 @@ class BlogController extends Controller
                 return redirect()->back()->withErrors($validate);
             }
         }
+        $path = request()->comments_pic->storeAs('images',request()->comments_pic->getClientOriginalName());
         \App\Comment::create([
             'name' => request('name'),
             'email' => request('email'),
-            'website' => request('website'),
+            'comments_pic' => $path,
             'message' => request('message'),
             'user_id' => $post->id,
             'post_id' => $post->id
@@ -98,17 +109,38 @@ class BlogController extends Controller
      */
     public function show(Request $request,$slug)
     {
-        $post = \App\Post::where('slug', $slug)->firstOrFail();
+        $post = \App\Post::where([
+            ['post_status','=',1],
+            ['delete_at','=',0],
+            ['slug', $slug]
+        ])->firstOrFail();
         $post->view_count = $post->view_count+1;
         if (!isset($_GET['no_view'])) {
             $post->save();
         }
         $category = \App\Post::find($post->id)->category;
-        $next = \App\Post::where('id', '>', $post->id)->orderBy('id')->first();
-        $previous = \App\Post::where('id', '<', $post->id)->orderBy('id','desc')->first();
-        $maxpost = \App\Post::max('id');
-        $minpost = \App\Post::min('id');
-        $posts = \App\Post::get();
+        $next = \App\Post::where([
+            ['post_status','=',1],
+            ['delete_at','=',0],
+            ['id', '>', $post->id]
+        ])->orderBy('id')->first();
+        $previous = \App\Post::where([
+            ['post_status','=',1],
+            ['delete_at','=',0],
+            ['id', '<', $post->id]
+        ])->orderBy('id','desc')->first();
+        $maxpost = \App\Post::where([
+            ['post_status','=',1],
+            ['delete_at','=',0]
+        ])->max('id');
+        $minpost = \App\Post::where([
+            ['post_status','=',1],
+            ['delete_at','=',0]
+        ])->min('id');
+        $posts = \App\Post::where([
+            ['post_status','=',1],
+            ['delete_at','=',0]
+        ])->get();
         $comments = \App\Post::find($post->id)->comments()->Paginate(3);
         $post_tags = \App\Post::find($post->id)->tags;
         $like_post_ip = \App\Like::where('ip_client', $request->ip())->first();
@@ -170,7 +202,12 @@ class BlogController extends Controller
 
         $category = \App\Category::where('slug', $slug)->firstOrFail();
 
-        $posts = \App\Category::where('id', $category->id)->firstOrFail()->posts()->Paginate(1);
+        $category_posts = \App\Category::where('id', $category->id)->firstOrFail()->posts();
+
+        $posts = $category_posts->where([ //nếu bài post có trường post_status = 0 (post rác) và delete_at = 1 (post đã bị xóa)
+            ['post_status','=',1],
+            ['delete_at','=',0]
+        ])->Paginate(1);
 
         $sum_posts = $posts->count();
 
@@ -183,7 +220,12 @@ class BlogController extends Controller
 
         $post_tag = \App\Tag::where('slug',$slug)->firstOrFail();
 
-        $tag_posts = \App\Tag::where('id', $post_tag->id)->firstOrFail()->posts()->Paginate(2);
+        $tag_posts_all = \App\Tag::where('id', $post_tag->id)->firstOrFail()->posts();
+
+        $tag_posts = $tag_posts_all->where([ //nếu bài post có trường post_status = 0 (post rác) và delete_at = 1 (post đã bị xóa)
+            ['post_status','=',1],
+            ['delete_at','=',0]
+        ])->Paginate(2);
 
         $categories = \App\Category::get();
 
@@ -192,7 +234,11 @@ class BlogController extends Controller
 
     public function search() {
         $q = $_GET['q'];
-        $posts = \App\Post::where('title', 'like', '%'.$q.'%')->Paginate(3);
+        $posts = \App\Post::where([ //nếu bài post có trường post_status = 0 (post rác) và delete_at = 1 (post đã bị xóa)
+            ['post_status','=',1],
+            ['delete_at','=',0],
+            ['title', 'like', '%'.$q.'%']
+        ])->Paginate(3);
         // dd($posts);
         $categories = \App\Category::get();
         return view('search.search',compact('posts','categories','q'));

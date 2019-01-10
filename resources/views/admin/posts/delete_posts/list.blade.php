@@ -1,6 +1,6 @@
 @extends('layouts.admin-temp')
 
-@section('posts-active')
+@section('delete-posts')
     active
 @endsection
 
@@ -11,12 +11,12 @@
 @section('header')
 <style type="text/css">
 	button#post-detail,
-	button#post-edit,
+	button#post-upback,
 	button#post-delete {
 		padding: 6px 10px;
 	}
 	#post-detail>i,
-	#post-edit>i,
+	#post-upback>i,
 	#post-delete>i {
 		height: 20px;
 		display: inline-flex;
@@ -24,7 +24,7 @@
 		align-items: center;
 		margin-right: 0px;
 	}
-	#post-edit>i,
+	#post-upback>i,
 	#post-delete>i {
 		left: 1px;
 	}
@@ -41,8 +41,7 @@
 	<!-- END BREADCRUMB -->
 	<!-- PAGE TITLE -->
 	<div class="page-title">                    
-		<h2><span class="fa fa-arrow-circle-o-left"></span> Quản Lý Bài Viết</h2><br><br><br>
-		<a href="{{route('admin-posts-create')}}"><button type="button" class="btn btn-info" style="font-size: 15px;margin-bottom: 10px;border-radius: 5px;"><i class="glyphicon glyphicon-pencil"></i>Thêm mới bài viết</button></a>
+		<h2><span class="fa fa-arrow-circle-o-left"></span> Quản Lý Bài Viết Bị Xóa</h2><br><br><br>
 	</div>
 	<!-- END PAGE TITLE -->                
 
@@ -89,12 +88,16 @@
 											@endforeach
 										</td>
 										<td align="center">
-											<a href="{{route('admin-posts-show',$post->id)}}" title="Detail" data-toggle="tooltip"><button class="btn btn-info" id="post-detail" title="Detail"><i class="glyphicon glyphicon-folder-open"></i></button></a>
-											<a href="{{route('admin-posts-edit',['id' => $post->id])}}" title="Edit" data-toggle="tooltip"><button class="btn btn-warning" id="post-edit" title="Edit"><i class="glyphicon glyphicon-edit"></i></button></a>
-											<form action="" style="display: initial;" method="POST" id="form_delete_post">
+											<a href="{{route('admin-delete-posts-show',$post->id)}}" title="Detail" data-toggle="tooltip"><button class="btn btn-info" id="post-detail" title="Detail"><i class="glyphicon glyphicon-folder-open"></i></button></a>
+											<form style="display: initial;" method="POST" id="form_delete_post_upback">
 												@csrf
 												{{ method_field('PUT') }}
-												<a href="#" data-id="{{$post->id}}" data-url="{{route('admin-posts-delete',['id'=>$post->id])}}" class="btn-delete" title="Delete" data-toggle="tooltip"><button class="btn btn-danger" id="post-delete" title="Delete"><i class="glyphicon glyphicon-trash"></i></button></a>
+												<a href="#" class="btn-upback" data-id="{{$post->id}}" data-url="{{route('admin-delete-posts-upback',$post->id)}}" title="Upback" data-toggle="tooltip"><button class="btn btn-warning" id="post-upback" title="Upback"><i class="glyphicon glyphicon-cloud-upload"></i></button></a>
+											</form>
+											<form style="display: initial;" method="POST" id="form_delete_post_real_delete">
+												@csrf
+												{{ method_field('delete') }}
+												<a href="#" class="btn-real-delete" data-id="{{$post->id}}" data-url="{{route('admin-delete-posts-realdelete',$post->id)}}" title="Delete" data-toggle="tooltip"><button class="btn btn-danger" id="post-delete" title="Delete"><i class="glyphicon glyphicon-trash"></i></button></a>
 											</form>
 										</td>
 									</tr>
@@ -130,53 +133,8 @@
 	<script type="text/javascript" src="{{asset('')}}admin_assets/js/plugins/bootstrap/bootstrap-colorpicker.js"></script>
 	<!-- END PAGE PLUGINS -->
 
+
 	<script type="text/javascript">
-		@if (session('create_success'))
-		$(document).ready(function() {
-			Command: toastr["success"]("{{session('create_success')}}"),
-
-			toastr.options = {
-				"closeButton": false,
-				"debug": false,
-				"newestOnTop": false,
-				"progressBar": false,
-				"positionClass": "toast-top-right",
-				"preventDuplicates": false,
-				"onclick": null,
-				"showDuration": "300",
-				"hideDuration": "1000",
-				"timeOut": "5000",
-				"extendedTimeOut": "1000",
-				"showEasing": "swing",
-				"hideEasing": "linear",
-				"showMethod": "fadeIn",
-				"hideMethod": "fadeOut"
-			}
-		});
-		@endif
-		@if (session('update_success'))
-		$(document).ready(function() {
-			Command: toastr["success"]("{{session('update_success')}}"),
-
-			toastr.options = {
-				"closeButton": false,
-				"debug": false,
-				"newestOnTop": false,
-				"progressBar": false,
-				"positionClass": "toast-top-right",
-				"preventDuplicates": false,
-				"onclick": null,
-				"showDuration": "300",
-				"hideDuration": "1000",
-				"timeOut": "5000",
-				"extendedTimeOut": "1000",
-				"showEasing": "swing",
-				"hideEasing": "linear",
-				"showMethod": "fadeIn",
-				"hideMethod": "fadeOut"
-			}
-		});
-		@endif
 		@if (session('detail_show_error'))
 		$(document).ready(function() {
 			Command: toastr["warning"]("{{session('detail_show_error')}}"),
@@ -201,24 +159,24 @@
 		});
 		@endif
 		$(document).ready(function() {
-			$('.btn-delete').click(function(event){
+			$('.btn-upback').click(function(event){
 				event.preventDefault();
 				var button_url=$(this).data('url');
 				var button_id=$(this).data('id');
 				Swal({
-					title: 'Bạn có chắc là muốn xóa?',
-					text: "Bạn chắc là muốn xóa bản ghi này chứ!",
+					title: 'Bạn có chắc là muốn up lại bài viết này?',
+					text: "Bạn chắc là muốn up lại bài viết này chứ!",
 					type: 'warning',
 					showCancelButton: true,
 					confirmButtonColor: '#3085d6',
 					cancelButtonColor: '#d33',
-					cancelButtonText: 'Không xóa!',
-					confirmButtonText: 'Xóa!'
+					cancelButtonText: 'Không đẩy!',
+					confirmButtonText: 'Đẩy lên!'
 				}).then((result) => {
 					if (result.value) {
 						Swal(
-							'Xóa bài viết thành công!',
-							'Bài viết sẽ được chuyển vào phần bài viết đã bị xóa',
+							'Up lại bài viết này thành công!',
+							'Bài viết sẽ được chuyển lên hệ thống',
 							'success'
 							)
 						$('button.swal2-confirm').on('click', function(event) {
@@ -227,13 +185,13 @@
 								type: 'put',
 								dataType: 'json',
 								data: {
-									_token: $('#form_delete_post input[name="_token"]').val(),
-									_method: $('#form_delete_post input[name="_method"]').val(),
+									_token: $('#form_delete_post_upback input[name="_token"]').val(),
+									_method: $('#form_delete_post_upback input[name="_method"]').val(),
 									id: button_id,
 								},
 							})
 							.done(function(response) {
-								Command: toastr["warning"](""+response.delete_success+""),
+								Command: toastr["success"](""+response.upback_success+""),
 
 								toastr.options = {
 									"closeButton": false,
@@ -254,7 +212,76 @@
 								}
 
 								setTimeout(function(){
-									window.location.href='{{route('admin-posts')}}'
+									window.location.href='{{route('admin-delete-posts')}}';
+								},1500)
+							})
+							.fail(function() {
+								console.log("error");
+							})
+							.always(function() {
+								console.log('complete')
+							});
+							
+						});
+					}
+				})
+			});
+
+			$('.btn-real-delete').click(function(event){
+				event.preventDefault();
+				var button_url=$(this).data('url');
+				var button_id=$(this).data('id');
+				// alert(button_url);
+				Swal({
+					title: 'Bạn có chắc là muốn xóa hẳn bài viết này không?',
+					text: "Bạn chắc là muốn xóa hẳn bài viết này chứ!",
+					type: 'warning',
+					showCancelButton: true,
+					confirmButtonColor: '#3085d6',
+					cancelButtonColor: '#d33',
+					cancelButtonText: 'Không Xóa!',
+					confirmButtonText: 'Xóa!'
+				}).then((result) => {
+					if (result.value) {
+						Swal(
+							'Xóa bài viết này thành công!',
+							'Bài viết sẽ đã mất hẳn hỏi cơ sở dữ liệu!!!',
+							'success'
+							)
+						$('button.swal2-confirm').on('click', function(event) {
+							$.ajax({
+								url: button_url,
+								type: 'delete',
+								dataType: 'json',
+								data: {
+									_token: $('#form_delete_post_real_delete input[name="_token"]').val(),
+									_method: $('#form_delete_post_real_delete input[name="_method"]').val(),
+									id: button_id,
+								},
+							})
+							.done(function(response) {
+								Command: toastr["warning"](""+response.real_delete_success+""),
+
+								toastr.options = {
+									"closeButton": false,
+									"debug": false,
+									"newestOnTop": false,
+									"progressBar": false,
+									"positionClass": "toast-top-right",
+									"preventDuplicates": false,
+									"onclick": null,
+									"showDuration": "300",
+									"hideDuration": "1000",
+									"timeOut": "5000",
+									"extendedTimeOut": "1000",
+									"showEasing": "swing",
+									"hideEasing": "linear",
+									"showMethod": "fadeIn",
+									"hideMethod": "fadeOut"
+								}
+
+								setTimeout(function(){
+									window.location.href='{{route('admin-delete-posts')}}';
 								},1500)
 							})
 							.fail(function() {

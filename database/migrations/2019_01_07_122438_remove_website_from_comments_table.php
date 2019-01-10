@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddWebsiteToCommentsTable extends Migration
+class RemoveWebsiteFromCommentsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,7 @@ class AddWebsiteToCommentsTable extends Migration
     public function up()
     {
         Schema::table('comments', function (Blueprint $table) {
-            $table->string('website')->after('email');
+            $table->dropColumn('website');
         });
     }
 
@@ -26,7 +26,7 @@ class AddWebsiteToCommentsTable extends Migration
     public function down()
     {
         Schema::table('comments', function (Blueprint $table) {
-            $table->dropColumn('website');
+            $table->string('website')->after('email');
         });
     }
 }

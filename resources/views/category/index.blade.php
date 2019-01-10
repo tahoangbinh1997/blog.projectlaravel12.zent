@@ -26,7 +26,7 @@
                 @if($key <= $sum_posts/2)
                   <div class="col-md-6">
                     <div class="blog-entry element-animate" data-animate-effect="fadeIn">
-                      <a href="{{asset('')}}detail/{{$post->slug}}"><img src="{{asset('storage/images')}}/{{$post->thumbnail}}" alt="Image placeholder"></a>
+                      <a href="{{asset('')}}detail/{{$post->slug}}"><img src="{{asset('storage')}}/{{$post->thumbnail}}" alt="Image placeholder"></a>
                       <div class="blog-content-body">
                         <div class="post-meta">
                           <a href="{{asset('')}}category/{{$category->slug}}">
@@ -160,7 +160,7 @@
                     @if($key > $sum_posts/2)
                         <div class="post-entry-horzontal">
                           <a href="{{asset('')}}detail/{{$post->slug}}">
-                            <div class="image element-animate"  data-animate-effect="fadeIn" style="background-image: url({{asset('storage/images')}}/{{$post->thumbnail}});"></div>
+                            <div class="image element-animate"  data-animate-effect="fadeIn" style="background-image: url({{asset('storage')}}/{{$post->thumbnail}});"></div>
                             <span class="text" style="display: block;">
                               <div class="post-meta">
                                 <span style="z-index: 0;" class="category">

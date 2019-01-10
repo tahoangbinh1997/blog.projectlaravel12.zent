@@ -153,7 +153,7 @@
                   @foreach($best_posts as $best_post)
                     <li>
                     <a href="{{asset('')}}detail/{{$best_post->slug}}">
-                      <img src="{{asset('storage/images')}}/{{$best_post->thumbnail}}" alt="Image placeholder" class="mr-4">
+                      <img src="{{asset('storage')}}/{{$best_post->thumbnail}}" alt="Image placeholder" class="mr-4">
                       <div class="text">
                         <h4>{{$best_post->title}}</h4>
                         <div class="post-meta">
@@ -233,7 +233,7 @@
                     @foreach($last_posts as $last_post)
                         <li>
                           <a href="{{asset('')}}/detail/{{$last_post->slug}}">
-                            <img src="{{asset('storage/images')}}/{{$last_post->thumbnail}}" alt="Image placeholder" class="mr-4">
+                            <img src="{{asset('storage')}}/{{$last_post->thumbnail}}" alt="Image placeholder" class="mr-4">
                             <div class="text">
                               <h4>{{$last_post->title}}</h4>
                               <div class="post-meta">

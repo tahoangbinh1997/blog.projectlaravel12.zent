@@ -61,7 +61,7 @@ active
     <div class="post-content-body">
       <div class="row mb-5">
           <div class="col-md-12 mb-4 element-animate">
-            <img src="{{asset('storage/images')}}/{{$post->thumbnail}}" alt="Image placeholder" class="img-fluid">
+            <img src="{{asset('storage')}}/{{$post->thumbnail}}" alt="Image placeholder" class="img-fluid">
         </div>
     </div>
     <content>{!!$post->content!!}</content>
@@ -99,7 +99,7 @@ active
     @foreach($comments as $comment)
     <li class="comment">
       <div class="vcard">
-        <img src="{{asset('storage/images')}}/user_1.jpg" alt="Image placeholder">
+        <img src="{{asset('storage')}}/{{$comment->comments_pic}}" alt="Image placeholder">
     </div>
     <div class="comment-body">
         <h3>{{$comment->name}}</h3>
@@ -117,7 +117,7 @@ active
         <ul class="children">
             <li class="comment">
               <div class="vcard">
-                <img src="{{asset('storage/images')}}/person_1.jpg" alt="Image placeholder">
+                <img src="{{asset('storage')}}/{{$comment->comments_pic}}" alt="Image placeholder">
             </div>
             <div class="comment-body">
                 <h3>Jean Doe</h3>
@@ -194,7 +194,7 @@ active
 
 <div class="comment-form-wrap pt-5">
     <h3 class="mb-5">Leave a comment</h3>
-    <form  name="contactForm" method="post" action="{{asset('')}}detail/{{$post->slug}}" autocomplete="off" class="p-5 bg-light">
+    <form  name="contactForm" method="post" action="{{asset('')}}detail/{{$post->slug}}" autocomplete="off" class="p-5 bg-light" enctype="multipart/form-data">
         @csrf
         <div class="form-group">
             <label for="name">Name *</label>
@@ -215,11 +215,11 @@ active
             @endif
         </div>
         <div class="form-group">
-            <label for="website">Website</label>
-            <input type="url" name="website" class="form-control" id="website" placeholder="Website" value="{{old('website')}}">
-            @if($errors->has('website'))
+            <label for="website">Thumbnail *</label>
+            <input type="file" name="comments_pic" class="form-control" id="comments_pic" placeholder="Thumbnail" value="{{old('comment_pic')}}">
+            @if($errors->has('comment_pic'))
             <p style="color: red;">
-                {{$errors->first('website')}}
+                {{$errors->first('comment_pic')}}
             </p>
             @endif
         </div>

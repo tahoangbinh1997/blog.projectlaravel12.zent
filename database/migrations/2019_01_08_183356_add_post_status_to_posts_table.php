@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddWebsiteToCommentsTable extends Migration
+class AddPostStatusToPostsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddWebsiteToCommentsTable extends Migration
      */
     public function up()
     {
-        Schema::table('comments', function (Blueprint $table) {
-            $table->string('website')->after('email');
+        Schema::table('posts', function (Blueprint $table) {
+            $table->integer('post_status')->after('thumbnail')->nullable(false);
         });
     }
 
@@ -25,8 +25,8 @@ class AddWebsiteToCommentsTable extends Migration
      */
     public function down()
     {
-        Schema::table('comments', function (Blueprint $table) {
-            $table->dropColumn('website');
+        Schema::table('posts', function (Blueprint $table) {
+            $table->dropColumn('post_status');
         });
     }
 }
