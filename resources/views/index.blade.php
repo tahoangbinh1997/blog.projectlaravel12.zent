@@ -273,7 +273,7 @@ active
                             }
                             @endphp
                             @endif
-                        </li>
+                            </li>
                         @endif
                         @endfor
                         @if($posts->hasMorePages())

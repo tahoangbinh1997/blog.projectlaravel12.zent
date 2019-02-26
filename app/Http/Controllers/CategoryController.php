@@ -19,7 +19,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = \App\Category::get();
+        $categories = \App\Category::orderBy('id','DESC')->get();
 
         return view('admin.categories.list',compact('categories'));
     }
@@ -171,17 +171,24 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-        \App\Category::find($id)->delete();
-        $delete_category_rela=\App\Post::where([
-            ['category_id','=',$id],
-        ])->get();
-        if (isset($delete_category_rela)) {
-            for ($i=0; $i < count($delete_category_rela); $i++) { 
-                $delete_category_rela[$i]->delete();
+        $category_posts = \App\Post::where('category_id','=',$id)->first();
+        if ($category_posts == NULL) {
+            \App\Category::find($id)->delete();
+            $delete_category_rela=\App\Post::where([
+                ['category_id','=',$id],
+            ])->get();
+            if (isset($delete_category_rela)) {
+                for ($i=0; $i < count($delete_category_rela); $i++) { 
+                    $delete_category_rela[$i]->delete();
+                }
             }
+            return response()->json([
+                'delete_success'=>'Xóa thể loại thành công!!!'
+            ]);
+        }else {
+            return response()->json([
+                'delete_errors'=>'Thể loại này do vẫn còn bài viết lựa chọn nên không thể xóa được!!!'
+            ]);
         }
-        return response()->json([
-            'delete_success'=>'Xóa thể loại thành công!!!'
-        ]);
     }
 }

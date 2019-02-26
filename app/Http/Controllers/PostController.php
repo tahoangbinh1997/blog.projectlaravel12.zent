@@ -33,7 +33,7 @@ class PostController extends Controller
         $posts = \App\Post::where([
             ['post_status','=',1],
             ['delete_at','=',0]
-        ])->get();
+        ])->orderBy('id','DESC')->get();
         $categories = \App\Category::get();
         return view('admin.posts.list',compact('posts','categories'));
     }
@@ -42,7 +42,7 @@ class PostController extends Controller
         $posts = \App\Post::where([
             ['post_status','=',0],
             ['delete_at','=',0]
-        ])->get();
+        ])->orderBy('id','DESC')->get();
         $categories = \App\Category::get();
         return view('admin.posts.trash_posts.list',compact('posts','categories'));
     }
@@ -51,7 +51,7 @@ class PostController extends Controller
         $posts = \App\Post::where([
             ['delete_at','=',1],
             ['post_status','=',1]
-        ])->get();
+        ])->orderBy('id','DESC')->get();
         $categories = \App\Category::get();
         return view('admin.posts.delete_posts.list',compact('posts','categories'));
     }

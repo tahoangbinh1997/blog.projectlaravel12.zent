@@ -15,6 +15,11 @@
         <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
         <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.33.1/sweetalert2.min.css">
         <meta name="csrf-token" content="{{ csrf_token() }}">
+        <style type="text/css">
+            .page-content {
+                height: 100%!important;
+            }
+        </style>
         <!-- EOF CSS INCLUDE -->                                    
         @yield('header')
     </head>
@@ -237,6 +242,14 @@
         <script type="text/javascript" src="{{asset('')}}admin_assets/js/plugins/jquery/jquery-ui.min.js"></script>
         <script type="text/javascript" src="{{asset('')}}admin_assets/js/plugins/bootstrap/bootstrap.min.js"></script>        
         <!-- END PLUGINS -->
+        
+        <script type="text/javascript" charset="utf-8">
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+        </script>
 
         @yield('footer')
 
@@ -248,14 +261,6 @@
         
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.33.1/sweetalert2.min.js"></script>
-        
-        <script type="text/javascript" charset="utf-8">
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-        </script>
     <!-- END SCRIPTS -->         
     </body>
 </html>

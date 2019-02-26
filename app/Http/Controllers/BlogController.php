@@ -238,6 +238,14 @@ class BlogController extends Controller
             ['post_status','=',1],
             ['delete_at','=',0],
             ['title', 'like', '%'.$q.'%']
+        ])->orWhere([
+            ['post_status','=',1],
+            ['delete_at','=',0],
+            ['content', 'like', '%'.$q.'%']
+        ])->orWhere([
+            ['post_status','=',1],
+            ['delete_at','=',0],
+            ['description', 'like', '%'.$q.'%']
         ])->Paginate(3);
         // dd($posts);
         $categories = \App\Category::get();

@@ -113,13 +113,6 @@
 @endsection
 
 @section('footer')
-	<script type="text/javascript">
-		$(document).ready(function() {
-			$('#data-table').DataTable( {
-				"order": [[ 0, "desc" ]]
-			} );
-		} );
-	</script>
 	<!-- THIS PAGE PLUGINS -->
 	<script type='text/javascript' src='{{asset('')}}admin_assets/js/plugins/icheck/icheck.min.js'></script>
 	<script type="text/javascript" src="{{asset('')}}admin_assets/js/plugins/mcustomscrollbar/jquery.mCustomScrollbar.min.js"></script>
@@ -261,13 +254,19 @@
 								console.log("error");
 							})
 							.always(function() {
-								console.log('complete')
+								console.log('complete');
 							});
-							
 						});
 					}
 				})
 			})
 		});
+	</script>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$('#data-table').DataTable( {
+				"order": [[ 0, "desc" ]]
+			} );
+		} );
 	</script>
 @endsection

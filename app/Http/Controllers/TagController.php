@@ -19,7 +19,7 @@ class TagController extends Controller
      */
     public function index()
     {
-        $tags = \App\Tag::get();
+        $tags = \App\Tag::orderBy('id','DESC')->get();
 
         return view('admin.tags.list',compact('tags'));
     }
@@ -46,7 +46,7 @@ class TagController extends Controller
             $validate = Validator::make(
                 request()->all(),
                 [
-                    'name' => 'required|unique:tags,name|min:4|max:15'
+                    'name' => 'required|unique:tags,name|min:4|max:30'
                 ],
 
                 [
@@ -124,7 +124,7 @@ class TagController extends Controller
                         'required',
                         Rule::unique('tags')->ignore($id),
                         'min:4',
-                        'max:15'
+                        'max:30'
                     ]
                 ],
 

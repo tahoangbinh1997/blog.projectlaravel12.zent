@@ -39,7 +39,18 @@ Route::prefix('/admin')->group(function(){
 
 		Route::get('/home', 'HomeController@admin_home')->name('admin-home');
 
+		// Route::get('/home1', function(){
+		// 	if (Auth::user()->permission == 0) {
+		// 		$app = app();
+		// 		$controller = $app->make('\App\Http\Controllers\HomeController');
+		// 		return $controller->callAction('admin_home', $parameters = array());
+		// 	}
+		// })->name('admin-home');
+
 		Route::prefix('/manager-posts')->group(function(){
+
+			// $app = app();
+			// $controller = $app->make('\App\Http\Controllers\HomeController');
 
 			Route::get('', 'PostController@admin_posts')->name('admin-posts');
 

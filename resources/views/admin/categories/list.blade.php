@@ -229,13 +229,6 @@
 @endsection
 
 @section('footer')
-	<script type="text/javascript">
-		$(document).ready(function() {
-			$('#data-table').DataTable( {
-				"order": [[ 0, "desc" ]]
-			} );
-		} );
-	</script>
 	<!-- THIS PAGE PLUGINS -->
 	<script type='text/javascript' src='{{asset('')}}admin_assets/js/plugins/icheck/icheck.min.js'></script>
 	<script type="text/javascript" src="{{asset('')}}admin_assets/js/plugins/mcustomscrollbar/jquery.mCustomScrollbar.min.js"></script>
@@ -308,8 +301,8 @@
 				.done(function(response) {
 					console.log("success");
 					if(response.errors){
-						if (response.errors.name) {
-							Command: toastr["warning"](response.errors.name),
+						$.each(response.errors, function(index, val) {
+							Command: toastr["warning"](val),
 
 							toastr.options = {
 								"closeButton": false,
@@ -328,28 +321,8 @@
 								"showMethod": "fadeIn",
 								"hideMethod": "fadeOut"
 							}
-						}
-						if (response.errors.description) {
-							Command: toastr["warning"](response.errors.description),
+						});
 
-							toastr.options = {
-								"closeButton": false,
-								"debug": false,
-								"newestOnTop": false,
-								"progressBar": false,
-								"positionClass": "toast-top-right",
-								"preventDuplicates": false,
-								"onclick": null,
-								"showDuration": "300",
-								"hideDuration": "1000",
-								"timeOut": "5000",
-								"extendedTimeOut": "1000",
-								"showEasing": "swing",
-								"hideEasing": "linear",
-								"showMethod": "fadeIn",
-								"hideMethod": "fadeOut"
-							}
-						}
 					}else{
 						console.log(response.data);
 						Command: toastr["success"](response.create_success),
@@ -446,8 +419,8 @@
 				.done(function(response) {
 					console.log("success");
 					if(response.errors){
-						if (response.errors.name) {
-							Command: toastr["warning"](response.errors.name),
+						$.each(response.errors, function(index, val) {
+							Command: toastr["warning"](val),
 
 							toastr.options = {
 								"closeButton": false,
@@ -466,28 +439,7 @@
 								"showMethod": "fadeIn",
 								"hideMethod": "fadeOut"
 							}
-						}
-						if (response.errors.description) {
-							Command: toastr["warning"](response.errors.description),
-
-							toastr.options = {
-								"closeButton": false,
-								"debug": false,
-								"newestOnTop": false,
-								"progressBar": false,
-								"positionClass": "toast-top-right",
-								"preventDuplicates": false,
-								"onclick": null,
-								"showDuration": "300",
-								"hideDuration": "1000",
-								"timeOut": "5000",
-								"extendedTimeOut": "1000",
-								"showEasing": "swing",
-								"hideEasing": "linear",
-								"showMethod": "fadeIn",
-								"hideMethod": "fadeOut"
-							}
-						}
+						});
 					}else{
 						console.log(response.data);
 						Command: toastr["success"](response.update_success),
@@ -550,29 +502,52 @@
 								type: 'delete',
 							})
 							.done(function(response) {
-								Command: toastr["warning"](""+response.delete_success+""),
+								if (response.delete_success) {
+									Command: toastr["warning"](""+response.delete_success+""),
 
-								toastr.options = {
-									"closeButton": false,
-									"debug": false,
-									"newestOnTop": false,
-									"progressBar": false,
-									"positionClass": "toast-top-right",
-									"preventDuplicates": false,
-									"onclick": null,
-									"showDuration": "300",
-									"hideDuration": "1000",
-									"timeOut": "5000",
-									"extendedTimeOut": "1000",
-									"showEasing": "swing",
-									"hideEasing": "linear",
-									"showMethod": "fadeIn",
-									"hideMethod": "fadeOut"
+									toastr.options = {
+										"closeButton": false,
+										"debug": false,
+										"newestOnTop": false,
+										"progressBar": false,
+										"positionClass": "toast-top-right",
+										"preventDuplicates": false,
+										"onclick": null,
+										"showDuration": "300",
+										"hideDuration": "1000",
+										"timeOut": "5000",
+										"extendedTimeOut": "1000",
+										"showEasing": "swing",
+										"hideEasing": "linear",
+										"showMethod": "fadeIn",
+										"hideMethod": "fadeOut"
+									}
+
+									setTimeout(function(){
+										window.location.href='{{route('admin-categories')}}'
+									},1500)
 								}
+								if (response.delete_errors) {
+									Command: toastr["warning"](""+response.delete_errors+""),
 
-								setTimeout(function(){
-									window.location.href='{{route('admin-categories')}}'
-								},1500)
+									toastr.options = {
+										"closeButton": false,
+										"debug": false,
+										"newestOnTop": false,
+										"progressBar": false,
+										"positionClass": "toast-top-right",
+										"preventDuplicates": false,
+										"onclick": null,
+										"showDuration": "300",
+										"hideDuration": "1000",
+										"timeOut": "5000",
+										"extendedTimeOut": "1000",
+										"showEasing": "swing",
+										"hideEasing": "linear",
+										"showMethod": "fadeIn",
+										"hideMethod": "fadeOut"
+									}
+								}
 							})
 							.fail(function() {
 								console.log("error");
@@ -586,5 +561,12 @@
 				})
 			})
 		});
+	</script>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$('#data-table').DataTable( {
+				"order": [[ 0, "desc" ]]
+			} );
+		} );
 	</script>
 @endsection
